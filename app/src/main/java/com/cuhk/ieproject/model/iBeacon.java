@@ -65,6 +65,6 @@ public class iBeacon {
         ibeacons.add(new iBeacon(2, "Classroom", Card.LOCATION_CLASSROOM, "[DF:49:A6:CD:24:9B]", "", -1, -1)); // Kobe
 
 //        ibeacons.add(new iBeacon(3, "Playground", Card.LOCATION_PLAYGROUND, "[DF:49:A6:CD:24:9B]", "", -1, -1)); //淺藍
-        return ibeacons; //time 1600 //develop git
+        return ibeacons; //time 1600
     }
 }
