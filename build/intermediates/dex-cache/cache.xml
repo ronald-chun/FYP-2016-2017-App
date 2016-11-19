@@ -30,21 +30,21 @@
     </item>
     <item
         is-multidex="false"
-        jar="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="24.0.2"
-        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
-        <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.0.0_f30e1b6227469f78b2f6025a1b99bb905dc8bab5.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="/Users/Ronald/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.0/support-annotations-25.0.0.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="a22d2cc94da87b254451fa8ed28afc30b4653773">
         <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/support-annotations-25.0.0_079008086517a8bbefe16f09ba9bd8db61db3ab6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
+        <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.0.0_f30e1b6227469f78b2f6025a1b99bb905dc8bab5.jar" />
     </item>
     <item
         is-multidex="false"
@@ -66,12 +66,57 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="75b1f366ff0bbc78f8b1f7cf0dc82e7c53afef6a">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.0.0_3f8a59e7a2b53499fc0b838d1661a109b781e25f.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/libs/internal_impl-25.0.0.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="665d21a8a069c96b4d9e8b434f5096d865b4e261">
         <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_7fbb2eb247e2c96ac3cdc86a8fc6139e234eefaf.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="07daa0b6e1d455c82a38422ffe287c18823d339a">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.0.0_610d5ddd3edde24e056bf5e82472821c63e5e77e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.estimote/sdk/0.13.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="7486889ec02f2bc90b62a2f7b685391f5fcb8be9">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.estimote-sdk-0.13.0_c8aaaf8a8acce0f5051cc72b8fc884fcefd3bbf1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="26674000177e45447a0326a6ad84612761199a13">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.0.0_aeffc6adbbc2ea3d26b5dacbad43ae0d5597b1ba.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="665d21a8a069c96b4d9e8b434f5096d865b4e261">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_7b83999874971ff549bbab95a9efb3909fe89a6a.jar" />
     </item>
     <item
         is-multidex="false"
@@ -84,12 +129,48 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="aa6e0ec2d0f1db8f51c85c68110cc77315b16c4a">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/instant-run_4d8812e814a3c5f278905d0fb185ca97732ba610.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="75b1f366ff0bbc78f8b1f7cf0dc82e7c53afef6a">
         <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.0.0_5b4c4a9a8e5909a1b3dae28e503470bbd4db31ea.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="53a420cd4f49274db6bd43475f8006ba67ef6bbd">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.0.0_963b7f4e6bbde76a271ed7d9d965d4cb7cde0c93.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="ee5faf4dee5b6a4364bf51587871047dde7c703a">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_a982eebe9595f538e3d9f48c9ac7be00e0178117.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="4ccbcda5c72027c7f7c14be9ff8640d9cb0d8da0">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.0.0_51da93b02ce8e4c288bef17831f8bac6587a33e4.jar" />
     </item>
     <item
         is-multidex="false"
@@ -111,12 +192,75 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="f2e3b9bc1ec25f652e8007ce7774c991e38f6a00">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_44e15e155244c4077af181f9d285f58554870793.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.0.0_551151d45cc3802f9bf130e9ec53420e6a41e2bf.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/libs/internal_impl-25.0.0.jar"
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="ee5faf4dee5b6a4364bf51587871047dde7c703a">
         <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_a446f9cf30bcdd11c4b304b61f46e8df3da30355.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.0.0_61c3006f188a583a65915d7591edf97d91e1c930.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.0.0_f7730f908f9f5a8bd1b361e3fc3c95b6cf6a034b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="67445721763355428efe74e0a973046f549aefb4">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_3eaecd8fe498ca7f3509f2400c2002ee2e8ad41e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="3b61a70884adaf0be3fc06c70c801e3e6df13133">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_b5b4dc9982ca9ac697a086ca12358e33d209253d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_d151e5a2e85c9b78a5bf148d2ad6edb2efe3db75.jar" />
     </item>
     <item
         is-multidex="false"
@@ -135,6 +279,15 @@
         revision="24.0.2"
         sha1="07daa0b6e1d455c82a38422ffe287c18823d339a">
         <dex dex="/Users/Ronald/Desktop/Ieproject/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.0.0_a6ddfcb06385122556f21b3c6f9ad66fa614bc73.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="d29714cc76b38157e3cbd034c66e1ec808eb4c19">
+        <dex dex="/Users/Ronald/Desktop/FYP-2016-2017-App/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.0.0_4991032e6b37dbf6847b0e90c48ad085d1a4e768.jar" />
     </item>
     <item
         is-multidex="false"
