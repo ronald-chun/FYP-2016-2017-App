@@ -72,6 +72,8 @@ public class Card {
         cards.add(new Card(17, LOCATION_CLASSROOM, "書", R.drawable.book, -1));
         cards.add(new Card(18, LOCATION_CLASSROOM, "計數機", R.drawable.calculator, -1));
 
+        cards.add(new Card(0, LOCATION_CANTEEN, "籃球", R.drawable.basketball, -1));
+
         return  cards;
     }
 
