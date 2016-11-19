@@ -1,0 +1,16 @@
+local.properties
+.gradle/2.14.1/taskArtifacts/cache.properties.lock
+.gradle/2.14.1/taskArtifacts/fileHashes.bin
+.gradle/2.14.1/taskArtifacts/fileSnapshots.bin
+.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin
+.gradle/2.14.1/taskArtifacts/taskArtifacts.bin
+.idea/workspace.xml
+.idea/libraries/animated_vector_drawable_25_0_0.xml
+.idea/libraries/appcompat_v7_25_0_0.xml
+.idea/libraries/sdk_0_13_0.xml
+.idea/libraries/support_compat_25_0_0.xml
+.idea/libraries/support_core_ui_25_0_0.xml
+.idea/libraries/support_core_utils_25_0_0.xml
+.idea/libraries/support_fragment_25_0_0.xml
+.idea/libraries/support_vector_drawable_25_0_0.xml
+app/app.iml
