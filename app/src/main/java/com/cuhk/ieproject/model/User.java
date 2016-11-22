@@ -7,12 +7,14 @@ public class User {
     private int id;
     private String name;
     private int machinePath;
+    private int sizeLevel;
 
-    public User(int id, String name, int machinePath){
+    public User(int id, String name, int machinePath, int sizeLevel){
         super();
         this.id = id;
         this.name = name;
         this.machinePath = machinePath;
+        this.sizeLevel = sizeLevel;
     }
 
     public int getId() {
@@ -25,5 +27,9 @@ public class User {
 
     public int getMachinePath() {
         return machinePath;
+    }
+
+    public int getSizeLevel() {
+        return sizeLevel;
     }
 }

@@ -18,6 +18,8 @@ public class Card {
     public static final int LOCATION_PLAYGROUND = 0;
     public static final int LOCATION_CANTEEN = 1;
     public static final int LOCATION_CLASSROOM = 2;
+    public static final int LOCATION_TEST = 3;
+
     public static final int LOCATION_RUBBISH = 999;
 
     public Card(int id, int location, String name, int imagePath, int soundPath){
@@ -71,6 +73,12 @@ public class Card {
         cards.add(new Card(16, LOCATION_CLASSROOM, "黑板", R.drawable.blackboard, -1));
         cards.add(new Card(17, LOCATION_CLASSROOM, "書", R.drawable.book, -1));
         cards.add(new Card(18, LOCATION_CLASSROOM, "計數機", R.drawable.calculator, -1));
+
+        cards.add(new Card(0, LOCATION_CANTEEN, "籃球", R.drawable.basketball, -1));
+
+        cards.add(new Card(11, LOCATION_TEST, "字母", R.drawable.character, -1));
+        cards.add(new Card(12, LOCATION_TEST, "電腦", R.drawable.computers, -1));
+        cards.add(new Card(13, LOCATION_TEST, "畫", R.drawable.drawing, -1));
 
         return  cards;
     }

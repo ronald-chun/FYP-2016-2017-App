@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cuhk.ieproject.model.Card;
+import com.cuhk.ieproject.model.User;
 import com.cuhk.ieproject.model.iBeacon;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -46,26 +47,45 @@ public class MainActivity extends AppCompatActivity {
 
     List<Card> cards = new ArrayList<>();
     List<iBeacon> ibeacons = new ArrayList<>();
+
     Integer[] locationScore;
+
+//    Dummy user for the sizeLevel
+//    User user = new User(1, "Chun", 1, 2);
+    User user = new User(2, "Fai", 2 , 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         setupReferences();
         setupData();
         setupBeacon();
+//        Toast.makeText(this, "Wellcome", Toast.LENGTH_LONG).show();
+
     }
 
     private void setupReferences() {
         firstLayout = (LinearLayout) findViewById(R.id.first_row);
         secondLayout = (LinearLayout) findViewById(R.id.second_row);
+
+        if (user.getSizeLevel() == 1) {
+            secondLayout.setVisibility(View.GONE);
+        } else {
+            secondLayout.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void setupData() {
         Display display = getWindowManager().getDefaultDisplay();
-        height = (display.getHeight()*40)/100;
+        if (user.getSizeLevel() == 1) {
+            height = (display.getHeight() * 90) / 100;
+        } else {
+            height = (display.getHeight() * 40)/100;
+        }
         width = height;
         cards = Card.dummy();
         ibeacons = iBeacon.dummy();
@@ -85,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // Note that beacons reported here are already sorted by estimated
+                        // NotSystem.out.print(...)e that beacons reported here are already sorted by estimated
                         // distance between device and beacon.
                         Beacon nearestBeacon = null;
 
@@ -129,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
     private void setupCards() {
         if (tempLocation != location){
             firstLayout.removeAllViews();
-            secondLayout.removeAllViews();
+            if(user.getSizeLevel() == 2) {
+                secondLayout.removeAllViews();
+            }
 
             int count = 0;
             for (int i = 0; i < cards.size(); i++) {
@@ -143,10 +165,14 @@ public class MainActivity extends AppCompatActivity {
                     layoutParms.setMargins(40, 0, 40, 0);
                     imageView.setLayoutParams(layoutParms);
 
-                    if (count%2 != 0) {
+                    if(user.getSizeLevel() == 1) {
                         firstLayout.addView(imageView);
                     } else {
-                        secondLayout.addView(imageView);
+                        if (count%2 != 0) {
+                            firstLayout.addView(imageView);
+                        } else {
+                            secondLayout.addView(imageView);
+                        }
                     }
 
                     imageView.setOnClickListener(new View.OnClickListener() {
