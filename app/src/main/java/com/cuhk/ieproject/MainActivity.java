@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     List<Card> cards = new ArrayList<>();
     List<iBeacon> ibeacons = new ArrayList<>();
-
     Integer[] locationScore;
 
 //    Dummy user for the sizeLevel
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupReferences() {
         firstLayout = (LinearLayout) findViewById(R.id.first_row);
         secondLayout = (LinearLayout) findViewById(R.id.second_row);
-
+        // user level and view control
         if (user.getSizeLevel() == 1) {
             secondLayout.setVisibility(View.GONE);
         } else {
