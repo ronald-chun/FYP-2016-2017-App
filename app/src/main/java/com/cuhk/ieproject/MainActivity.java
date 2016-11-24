@@ -5,11 +5,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -88,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
     Integer[] locationScore;
 
 //    Dummy user for the sizeLevel
-//    User user = new User(1, "Chun", 1, 2);
-    User user = new User(2, "Fai", 2 , 1);
+    User user = new User(1, "Chun", 1, 2);
+//    User user = new User(2, "Fai", 2 , 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (currentCard.getLocation() == location) {
                     count++;
-                    ImageView imageView = new ImageView(this);
+                    final ImageView imageView = new ImageView(this);
                     imageView.setImageResource(currentCard.getImagePath());
                     LinearLayout.LayoutParams layoutParms = new LinearLayout.LayoutParams(width,height);
                     layoutParms.setMargins(40, 0, 40, 0);
@@ -212,11 +214,36 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    imageView.setOnClickListener(new View.OnClickListener() {
+//                    imageView.setOnClickListener(new View.OnClickListener() {
+//
+//                        @Override
+//                        public void onClick(View view) {
+//                            makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_LONG);
+//                        }
+//                    });
 
+
+                    // change the image touch event 20161124 22:59
+                    imageView.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View view) {
-                            makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_LONG);
+                        public boolean onTouch(View arg0, MotionEvent arg1) {
+                            switch (arg1.getAction()) {
+                                case MotionEvent.ACTION_DOWN: {
+                                    Drawable highlight = getResources().getDrawable( R.drawable.customborder);
+                                    imageView.setBackgroundDrawable(highlight);
+                                    makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_SHORT);
+                                    break;
+                                }
+                                case MotionEvent.ACTION_UP:{
+                                    imageView.setBackgroundDrawable(null);
+                                    break;
+                                }
+                                case MotionEvent.ACTION_MOVE:{
+                                    imageView.setBackgroundDrawable(null);
+                                    break;
+                                }
+                            }
+                            return true;
                         }
                     });
                 }
