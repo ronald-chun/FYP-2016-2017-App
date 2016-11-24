@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     BeaconManager beaconManager;
     String nearestMacAddress;
 
+    
     private static Toast toast;
     private static TextView toastText;
 
