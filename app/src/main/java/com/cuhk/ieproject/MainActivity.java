@@ -3,6 +3,7 @@ package com.cuhk.ieproject;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cuhk.ieproject.model.Card;
@@ -23,6 +25,8 @@ import com.estimote.sdk.Utils;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
+
+import in.championswimmer.sfg.lib.SimpleFingerGestures;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
     Integer[] locationScore;
 
 //    Dummy user for the sizeLevel
-//    User user = new User(1, "Chun", 1, 2);
-    User user = new User(2, "Fai", 2 , 1);
+    User user = new User(1, "Chun", 1, 2);
+//    User user = new User(2, "Fai", 2 , 1);
+
+    private SimpleFingerGestures mySfg = new SimpleFingerGestures();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +65,70 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+
         setupReferences();
         setupData();
         setupBeacon();
 //        Toast.makeText(this, "Wellcome", Toast.LENGTH_LONG).show();
 
+//        setContentView(R.layout.test1);
+//        ImageView mv = (ImageView) findViewById(R.id.myview);
+//        final TextView grtv = (TextView) findViewById(R.id.gestureResultTextView);
+        final LinearLayout cardArea = (LinearLayout) findViewById(R.id.card_area);
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int width = size.x;
+//        int height = size.y;
+//
+
+        SimpleFingerGestures mySfg = new SimpleFingerGestures();
+        mySfg.setDebug(true);
+        mySfg.setConsumeTouchEvents(true);
+
+        mySfg.setOnFingerGestureListener(new SimpleFingerGestures.OnFingerGestureListener() {
+            @Override
+            public boolean onSwipeUp(int fingers, long gestureDuration, double gestureDistance) {
+//                if (fingers == 4) {
+//                    grtv.setText("swiped " + fingers + " up");
+                    Toast.makeText(getApplicationContext(), fingers + ": Go to setting", Toast.LENGTH_LONG).show();
+//                }
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeDown(int fingers, long gestureDuration, double gestureDistance) {
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
+                return false;
+            }
+
+            @Override
+            public boolean onPinch(int fingers, long gestureDuration, double gestureDistance) {
+                return false;
+            }
+
+            @Override
+            public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
+                return false;
+            }
+
+            @Override
+            public boolean onDoubleTap(int fingers) {
+                Toast.makeText(getApplicationContext(), "onDoubleTap " + fingers + " !", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+        });
+        cardArea.setOnTouchListener(mySfg);
     }
 
     private void setupReferences() {
@@ -249,4 +314,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
