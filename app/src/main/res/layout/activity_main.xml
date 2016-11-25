@@ -1,10 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:id="@+id/main"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/lightblue"
+    tools:context=".MainActivity">
 
     <HorizontalScrollView
         android:layout_height="match_parent"
@@ -26,11 +29,13 @@
             android:orientation="horizontal"
             android:layout_margin="10dp"
             android:layout_weight="1">
+            <!--android:background="@drawable/customborder">-->
 
             <!--<ImageView-->
                 <!--android:id="@+id/image"-->
-                <!--android:layout_width="180dp"-->
-                <!--android:layout_height="180dp"/>-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@drawable/customborder"/>-->
 
             <!--<TextView-->
                 <!--android:id="@+id/textview"-->
@@ -45,7 +50,7 @@
             android:layout_height="0dp"
             android:orientation="horizontal"
             android:layout_margin="10dp"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
         </LinearLayout>
 

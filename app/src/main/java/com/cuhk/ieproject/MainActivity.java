@@ -2,13 +2,20 @@ package com.cuhk.ieproject;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +44,38 @@ public class MainActivity extends AppCompatActivity {
 
     BeaconManager beaconManager;
     String nearestMacAddress;
+
+    
+    private static Toast toast;
+    private static TextView toastText;
+
+    private static void makeTextAndShow(final Context context, final String text, final int duration) {
+        if (toast == null) {
+            //如果還沒有建立過Toast，才建立
+            final ViewGroup toastView = new FrameLayout(context); // 用來裝toastText的容器
+            final FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            final GradientDrawable background = new GradientDrawable();
+            toastText = new TextView(context);
+            toastText.setLayoutParams(flp);
+            toastText.setSingleLine(false);
+            toastText.setTextSize(30);
+            toastText.setTextColor(Color.argb(0xAA, 0xFF, 0xFF, 0xFF)); // 設定文字顏色為有點透明的白色
+            background.setColor(Color.argb(0xAA, 0x00, 0xAA, 0x00)); // 設定氣泡訊息顏色為有點透明的紅色
+            background.setCornerRadius(50); // 設定氣泡訊息的圓角程度
+
+            toastView.setPadding(60, 60, 60, 60); // 設定文字和邊界的距離
+            toastView.addView(toastText);
+            toastView.setBackgroundDrawable(background);
+
+            toast = new Toast(context);
+            toast.setView(toastView);
+        }
+        toastText.setText(text);
+        toast.setDuration(duration);
+        toast.show();
+    }
+
+
 
     int height;
     int width;
@@ -223,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (currentCard.getLocation() == location) {
                     count++;
-                    ImageView imageView = new ImageView(this);
+                    final ImageView imageView = new ImageView(this);
                     imageView.setImageResource(currentCard.getImagePath());
                     LinearLayout.LayoutParams layoutParms = new LinearLayout.LayoutParams(width,height);
                     layoutParms.setMargins(40, 0, 40, 0);
@@ -239,12 +278,36 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    imageView.setOnClickListener(new View.OnClickListener() {
+//                    imageView.setOnClickListener(new View.OnClickListener() {
+//
+//                        @Override
+//                        public void onClick(View view) {
+//                            makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_LONG);
+//                        }
+//                    });
 
+
+                    // change the image touch event 20161124 22:59
+                    imageView.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View view) {
-                            Toast.makeText(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_LONG)
-                                    .show();
+                        public boolean onTouch(View arg0, MotionEvent arg1) {
+                            switch (arg1.getAction()) {
+                                case MotionEvent.ACTION_DOWN: {
+                                    Drawable highlight = getResources().getDrawable( R.drawable.customborder);
+                                    imageView.setBackgroundDrawable(highlight);
+                                    makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_SHORT);
+                                    break;
+                                }
+                                case MotionEvent.ACTION_UP:{
+                                    imageView.setBackgroundDrawable(null);
+                                    break;
+                                }
+                                case MotionEvent.ACTION_MOVE:{
+                                    imageView.setBackgroundDrawable(null);
+                                    break;
+                                }
+                            }
+                            return true;
                         }
                     });
                 }
