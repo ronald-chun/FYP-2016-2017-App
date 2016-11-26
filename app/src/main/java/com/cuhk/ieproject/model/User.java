@@ -32,4 +32,8 @@ public class User {
     public int getSizeLevel() {
         return sizeLevel;
     }
+
+    public void setSizeLevel(int sizeLevel) {
+        this.sizeLevel = sizeLevel;
+    }
 }
