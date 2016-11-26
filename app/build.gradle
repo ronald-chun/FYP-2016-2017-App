@@ -25,4 +25,5 @@ dependencies {
     compile 'com.estimote:sdk:0.13.0@aar'
     compile files('lib/libSFG-1.1-release.jar')
     compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

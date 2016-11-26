@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,6 +29,10 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
@@ -41,13 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
     LinearLayout firstLayout;
     LinearLayout secondLayout;
+    LinearLayout cardArea;
 
     BeaconManager beaconManager;
     String nearestMacAddress;
 
-    
+
     private static Toast toast;
     private static TextView toastText;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     private static void makeTextAndShow(final Context context, final String text, final int duration) {
         if (toast == null) {
@@ -76,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     int height;
     int width;
 
@@ -84,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
     int beaconSize;
     int location = Card.LOCATION_NULL;
     int tempLocation = Card.LOCATION_NULL;
+    int tempSizeLevel = -1;
 
     private static final int REQUEST_ENABLE_BT = 1234;
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
@@ -92,11 +103,14 @@ public class MainActivity extends AppCompatActivity {
     List<iBeacon> ibeacons = new ArrayList<>();
     Integer[] locationScore;
 
-//    Dummy user for the sizeLevel
-    User user = new User(1, "Chun", 1, 2);
-//    User user = new User(2, "Fai", 2 , 1);
+    //    Dummy user for the sizeLevel: 0 = one row, 1 = two rows
+//    User user = new User(1, "Chun", 1, 1);
+    User user = new User(2, "Fai", 2, 0);
 
     private SimpleFingerGestures mySfg = new SimpleFingerGestures();
+//    mySfg.setDebug(true);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,77 +118,81 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
         setupReferences();
         setupData();
         setupBeacon();
 //        Toast.makeText(this, "Wellcome", Toast.LENGTH_LONG).show();
 
-//        setContentView(R.layout.test1);
-//        ImageView mv = (ImageView) findViewById(R.id.myview);
-//        final TextView grtv = (TextView) findViewById(R.id.gestureResultTextView);
-        final LinearLayout cardArea = (LinearLayout) findViewById(R.id.card_area);
-//        Display display = getWindowManager().getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int width = size.x;
-//        int height = size.y;
-//
 
-        SimpleFingerGestures mySfg = new SimpleFingerGestures();
-        mySfg.setDebug(true);
+        // Register the background layout
+        final LinearLayout background = (LinearLayout) findViewById(R.id.background);
         mySfg.setConsumeTouchEvents(true);
-
         mySfg.setOnFingerGestureListener(new SimpleFingerGestures.OnFingerGestureListener() {
             @Override
-            public boolean onSwipeUp(int fingers, long gestureDuration, double gestureDistance) {
-//                if (fingers == 4) {
-//                    grtv.setText("swiped " + fingers + " up");
-                    Toast.makeText(getApplicationContext(), fingers + ": Go to setting", Toast.LENGTH_LONG).show();
-//                }
+            public boolean onSwipeUp ( int fingers, long gestureDuration, double gestureDistance){
+                // Change the picture size when 4 fingers swipe up
+                if (fingers == 4) {
+                    makeTextAndShow(getApplicationContext(), "變更圖片大小", Toast.LENGTH_LONG);
+                    firstLayout.removeAllViews();
+                    if (user.getSizeLevel() == 1) {
+                        secondLayout.removeAllViews();
+                    }
+                    user.setSizeLevel((user.getSizeLevel() + 1) % 2);
+                    startActivity(getIntent());
+                    Log.d(TAG, "user.getSizeLevel(): " + user.getSizeLevel());
+                    setupReferences();
+                    setupData();
+//                    setupBeacon();
+
+
+
+                }
                 return false;
             }
 
             @Override
-            public boolean onSwipeDown(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeDown ( int fingers, long gestureDuration, double gestureDistance){
                 return false;
             }
 
             @Override
-            public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeLeft ( int fingers, long gestureDuration, double gestureDistance){
                 return false;
             }
 
             @Override
-            public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onSwipeRight ( int fingers, long gestureDuration, double gestureDistance){
                 return false;
             }
 
             @Override
-            public boolean onPinch(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onPinch ( int fingers, long gestureDuration, double gestureDistance){
                 return false;
             }
 
             @Override
-            public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
+            public boolean onUnpinch ( int fingers, long gestureDuration, double gestureDistance){
                 return false;
             }
 
             @Override
-            public boolean onDoubleTap(int fingers) {
-                Toast.makeText(getApplicationContext(), "onDoubleTap " + fingers + " !", Toast.LENGTH_LONG).show();
+            public boolean onDoubleTap ( int fingers){
                 return false;
             }
-
         });
-        cardArea.setOnTouchListener(mySfg);
+        background.setOnTouchListener(mySfg);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void setupReferences() {
         firstLayout = (LinearLayout) findViewById(R.id.first_row);
         secondLayout = (LinearLayout) findViewById(R.id.second_row);
+        cardArea = (LinearLayout) findViewById(R.id.card_area);
         // user level and view control
-        if (user.getSizeLevel() == 1) {
+        if (user.getSizeLevel() == 0) {
             secondLayout.setVisibility(View.GONE);
         } else {
             secondLayout.setVisibility(View.VISIBLE);
@@ -184,17 +202,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupData() {
         Display display = getWindowManager().getDefaultDisplay();
-        if (user.getSizeLevel() == 1) {
+        if (user.getSizeLevel() == 0) {
             height = (display.getHeight() * 90) / 100;
         } else {
-            height = (display.getHeight() * 40)/100;
+            height = (display.getHeight() * 40) / 100;
         }
         width = height;
         cards = Card.dummy();
         ibeacons = iBeacon.dummy();
         beaconSize = ibeacons.size();
         locationScore = new Integer[beaconSize];
-        for (int position = 0; position < beaconSize; position++){
+        for (int position = 0; position < beaconSize; position++) {
             locationScore[position] = 0;
         }
     }
@@ -224,11 +242,11 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (nearestMacAddress != null) {
-                            for (int position = 0; position < beaconSize; position++){
+                            for (int position = 0; position < beaconSize; position++) {
                                 iBeacon currentiBeacon = ibeacons.get(position);
-                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())){
+                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())) {
                                     locationScore[position]++;
-                                }else{
+                                } else {
                                     locationScore[position] = 0;
                                 }
                             }
@@ -236,13 +254,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                for (int position = 0; position < beaconSize; position++){
-                    if (locationScore[position] >= MAX_VALUE){
+                for (int position = 0; position < beaconSize; position++) {
+                    if (locationScore[position] >= MAX_VALUE) {
                         location = ibeacons.get(position).getLocationID();
                     }
                 }
 
-                if (location!= Card.LOCATION_NULL){
+                if (location != Card.LOCATION_NULL) {
                     setupCards();
                 }
             }
@@ -250,9 +268,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupCards() {
-        if (tempLocation != location){
+        if (tempLocation != location || tempSizeLevel != user.getSizeLevel()) {
             firstLayout.removeAllViews();
-            if(user.getSizeLevel() == 2) {
+            if (user.getSizeLevel() == 1) {
                 secondLayout.removeAllViews();
             }
 
@@ -264,14 +282,14 @@ public class MainActivity extends AppCompatActivity {
                     count++;
                     final ImageView imageView = new ImageView(this);
                     imageView.setImageResource(currentCard.getImagePath());
-                    LinearLayout.LayoutParams layoutParms = new LinearLayout.LayoutParams(width,height);
+                    LinearLayout.LayoutParams layoutParms = new LinearLayout.LayoutParams(width, height);
                     layoutParms.setMargins(40, 0, 40, 0);
                     imageView.setLayoutParams(layoutParms);
 
-                    if(user.getSizeLevel() == 1) {
+                    if (user.getSizeLevel() == 0) {
                         firstLayout.addView(imageView);
                     } else {
-                        if (count%2 != 0) {
+                        if (count % 2 != 0) {
                             firstLayout.addView(imageView);
                         } else {
                             secondLayout.addView(imageView);
@@ -293,16 +311,16 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onTouch(View arg0, MotionEvent arg1) {
                             switch (arg1.getAction()) {
                                 case MotionEvent.ACTION_DOWN: {
-                                    Drawable highlight = getResources().getDrawable( R.drawable.customborder);
+                                    Drawable highlight = getResources().getDrawable(R.drawable.customborder);
                                     imageView.setBackgroundDrawable(highlight);
                                     makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCard.getName(), Toast.LENGTH_SHORT);
                                     break;
                                 }
-                                case MotionEvent.ACTION_UP:{
+                                case MotionEvent.ACTION_UP: {
                                     imageView.setBackgroundDrawable(null);
                                     break;
                                 }
-                                case MotionEvent.ACTION_MOVE:{
+                                case MotionEvent.ACTION_MOVE: {
                                     imageView.setBackgroundDrawable(null);
                                     break;
                                 }
@@ -313,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             tempLocation = location;
+            tempSizeLevel = user.getSizeLevel();
         }
         location = Card.LOCATION_NULL;
     }
@@ -325,19 +344,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        super.onStart();
+        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Device does not have Bluetooth Low Energy", Toast.LENGTH_LONG).show();
-        }else{
-            if (!bluetoothAdapter.isEnabled()){
+        } else {
+            if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {
                 connectToService();
             }
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
     @Override
@@ -348,7 +372,12 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Error while stopping ranging", e);
         }
 
-        super.onStop();
+        super.onStop();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
     }
 
     @Override
@@ -379,4 +408,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
 }
