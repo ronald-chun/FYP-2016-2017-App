@@ -8,55 +8,99 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="@color/lightblue"
     android:id="@+id/background"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:weightSum="1"
+    android:orientation="vertical">
 
-    <HorizontalScrollView
-        android:layout_height="match_parent"
+    <!-- Add by Felix 2017-02-17 -->
+    <!-- Change to vertical view -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:scrollbarAlwaysDrawHorizontalTrack="false"
-        android:scrollbars="none">
-
-    <LinearLayout
-        android:id="@+id/card_area"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:scrollbars="none"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/first_row"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
-            <!--android:background="@drawable/customborder">-->
+            android:id="@+id/card_area"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-            <!--<ImageView-->
-                <!--android:id="@+id/image"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:background="@drawable/customborder"/>-->
+            <LinearLayout
+                android:id="@+id/first_row"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:layout_weight="1">
 
-            <!--<TextView-->
-                <!--android:id="@+id/textview"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/second_row"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
-            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/second_row"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:layout_weight="1">
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </LinearLayout>
 
-</HorizontalScrollView>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Comment by Felix 2017-02-17 -->
+
+        <!--<HorizontalScrollView-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:scrollbarAlwaysDrawHorizontalTrack="false"-->
+        <!--android:scrollbars="none"-->
+        <!--android:layout_weight="0.96">-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/card_area"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/first_row"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:layout_weight="5">-->
+            <!--&lt;!&ndash;android:background="@drawable/customborder">&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/image"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:background="@drawable/customborder"/>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/textview"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/second_row"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:layout_weight="1">-->
+
+        <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
+<!--</HorizontalScrollView>-->
 
 </LinearLayout>

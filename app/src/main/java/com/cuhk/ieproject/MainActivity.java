@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
     Integer[] locationScore;
 
     //    Dummy user for the sizeLevel: 0 = one row, 1 = two rows
-//    User user = new User(1, "Chun", 1, 1);
-    User user = new User(2, "Fai", 2, 0);
+    User user = new User(1, "Chun", 1, 1);
+    //User user = new User(2, "Fai", 2, 0);
 
     private SimpleFingerGestures mySfg = new SimpleFingerGestures();
 //    mySfg.setDebug(true);
@@ -130,6 +130,17 @@ public class MainActivity extends AppCompatActivity {
         mySfg.setOnFingerGestureListener(new SimpleFingerGestures.OnFingerGestureListener() {
             @Override
             public boolean onSwipeUp ( int fingers, long gestureDuration, double gestureDistance){
+                // move to onSwipeLeft by Felix 2017-02-17
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeDown ( int fingers, long gestureDuration, double gestureDistance){
+                return false;
+            }
+
+            @Override
+            public boolean onSwipeLeft ( int fingers, long gestureDuration, double gestureDistance){
                 // Change the picture size when 4 fingers swipe up
                 if (fingers == 4) {
                     makeTextAndShow(getApplicationContext(), "變更圖片大小", Toast.LENGTH_LONG);
@@ -142,21 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "user.getSizeLevel(): " + user.getSizeLevel());
                     setupReferences();
                     setupData();
-//                    setupBeacon();
-
-
-
+                    //setupBeacon();
                 }
-                return false;
-            }
-
-            @Override
-            public boolean onSwipeDown ( int fingers, long gestureDuration, double gestureDistance){
-                return false;
-            }
-
-            @Override
-            public boolean onSwipeLeft ( int fingers, long gestureDuration, double gestureDistance){
                 return false;
             }
 

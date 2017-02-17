@@ -30,7 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait"> <!-- Change to portrait view by Felix 2017-02-17 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
