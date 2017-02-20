@@ -1,6 +1,7 @@
-local.properties
-.gradle/*
-.idea/*
-app/app.iml
-FYP-2016-2017-App.iml
-build/intermediates/dex-cache/cache.xml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
