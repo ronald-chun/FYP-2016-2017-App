@@ -66,10 +66,11 @@ public class iBeacon {
         ibeacons.add(new iBeacon(6, "Classroom", Card.LOCATION_CLASSROOM, "[F2:A3:BF:FB:FD:5A]", "", -1, -1)); //purple
         ibeacons.add(new iBeacon(7, "Canteen", Card.LOCATION_CANTEEN, "[C5:95:18:55:90:43]", "", -1, -1)); //yellow
 
-        ibeacons.add(new iBeacon(8, "Playground", Card.LOCATION_PLAYGROUND, "F0:F4:78:E8:58:25]", "", -1, -1));  // Chun's 1st Purple
-        ibeacons.add(new iBeacon(9, "Canteen", Card.LOCATION_CANTEEN, "[F3:C7:5C:EB:92:CA]", "", -1, -1));  // Chun's 2nd Yellow
+        ibeacons.add(new iBeacon(8, "Playground", Card.LOCATION_PLAYGROUND, "[F0:F4:78:E8:58:25]", "", -1, -1));  // Chun's 1st Purple
+        ibeacons.add(new iBeacon(9, "Classroom", Card.LOCATION_CLASSROOM, "[F3:C7:5C:EB:92:CA]", "", -1, -1));  // Chun's 2nd Yellow
         ibeacons.add(new iBeacon(10, "Classroom", Card.LOCATION_CLASSROOM, "[CF:FA:CB:FD:7F:BF]", "", -1, -1));  // Fai
-        ibeacons.add(new iBeacon(11, "Playground", Card.LOCATION_PLAYGROUND, "[DF:49:A6:CD:24:9B]", "", -1, -1));  // Kobe
+        ibeacons.add(new iBeacon(11, "Playground", Card.LOCATION_PLAYGROUND, "[DF:49:A6:CD:24:9B]", "", -1, -1));  // Kobe's 1st dark blue
+        ibeacons.add(new iBeacon(12, "Classroom", Card.LOCATION_CLASSROOM, "[F4:89:B9:37:C9:2F]", "", -1, -1));  // Kobe's 2nd pink
 
 
 
