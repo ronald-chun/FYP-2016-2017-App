@@ -216,13 +216,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onSwipeUp(int fingers, long gestureDuration, double gestureDistance) {
-                cardGV.scrollTo(500,1000);
+                //cardGV.scrollTo(500,1000);
                 return false;
             }
 
             @Override
             public boolean onSwipeDown(int fingers, long gestureDuration, double gestureDistance) {
-                cardGV.scrollTo(700,200);
+                //cardGV.scrollTo(700,200);
                 return false;
             }
 
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         background.setOnTouchListener(mySfg);
-        cardGV.setOnTouchListener(mySfg);
+        background.setOnTouchListener(mySfg);
     }
 
     private class CardListAdapter extends ArrayAdapter<Card> {
