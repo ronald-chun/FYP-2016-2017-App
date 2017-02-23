@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
             itemView.setLayoutParams(param);
 
             ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(currentCard.getImagePath());
-            // return card info to toast
+            // return card info to toast display
             itemView.setTag(currentCards.get(position).getName());
 
 
