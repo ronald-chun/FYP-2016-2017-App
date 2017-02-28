@@ -19,6 +19,7 @@ public class Card {
     public static final int LOCATION_CANTEEN = 1;
     public static final int LOCATION_CLASSROOM = 2;
     public static final int LOCATION_RUBBISH = 999;
+    public static final int LOCATION_DEFAULT = 3;
 
     public Card(int id, int location, String name, int imagePath, int soundPath){
         super();
@@ -51,6 +52,8 @@ public class Card {
 
     public static ArrayList<Card> dummy() {
         ArrayList<Card> cards = new ArrayList<>();
+        cards.add(new Card(-1, LOCATION_DEFAULT, "CAMERA", R.drawable.camera_icon, -1));
+
         cards.add(new Card(0, LOCATION_PLAYGROUND, "籃球", R.drawable.basketball, -1));
         cards.add(new Card(1, LOCATION_PLAYGROUND, "足球", R.drawable.football_ball, -1));
         cards.add(new Card(2, LOCATION_PLAYGROUND, "乒乓球", R.drawable.play_ping_pong, -1));

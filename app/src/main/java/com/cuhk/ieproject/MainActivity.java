@@ -5,11 +5,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -22,6 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +49,8 @@ import com.estimote.sdk.Utils;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
@@ -69,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
     int MAX_VALUE = 2;
     int beaconSize;
     int location = Card.LOCATION_NULL;
+    int cam = Card.LOCATION_DEFAULT;
     int tempLocation = Card.LOCATION_NULL;
+    int noLocation = Card.LOCATION_DEFAULT;
 
     private static final int REQUEST_ENABLE_BT = 1234;
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
@@ -85,6 +98,62 @@ public class MainActivity extends AppCompatActivity {
     AbsListView.LayoutParams param;
 
     private SimpleFingerGestures mySfg = new SimpleFingerGestures();
+
+    private static Toast toast;
+    private static TextView toastText;
+
+    private static final int ACTIVITY_START_CAMERA_APP = 0;
+    private ImageView mPhotoCapturedImageView;
+    private String mImageFileLocation = "";
+
+    private void takePhoto() {
+        Intent callCameraApplicationIntent = new Intent();
+        callCameraApplicationIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = null;
+        try{
+            photoFile = createImageFile();
+
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        callCameraApplicationIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+
+        startActivityForResult(callCameraApplicationIntent, ACTIVITY_START_CAMERA_APP);
+    }
+
+    File createImageFile() throws IOException {
+        String imageFileName = "UserImage"+ "_";
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
+        mImageFileLocation = image.getAbsolutePath();
+
+        return image;
+
+    }
+
+    private static void makeTextAndShow(final Context context, final String text, final int duration){
+        if(toast==null){
+            final ViewGroup toastView = new FrameLayout(context);
+            final FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            final GradientDrawable background = new GradientDrawable();
+            toastText = new TextView(context);
+            toastText.setLayoutParams(flp);
+            toastText.setSingleLine(false);
+            toastText.setTextSize(30);
+            toastText.setTextColor(Color.argb(0xAA, 0xFF, 0xFF, 0xFF)); // white text
+            background.setColor(Color.argb(0xAA, 0x00, 0xAA, 0x00)); // red toast
+            background.setCornerRadius(50); // toast round corner
+            toastView.setPadding(60, 60, 60, 60);
+            toastView.addView(toastText);
+            toastView.setBackgroundDrawable(background);
+            toast = new Toast(context);
+            toast.setView(toastView);
+        }
+        toastText.setText(text);
+        toast.setDuration(duration);
+        toast.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,9 +267,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                if (location!= Card.LOCATION_NULL){
-                    setupCards();
-                }
+//                if (location!= Card.LOCATION_NULL){
+//                    setupCards();
+//                }
+                setupCardsWithCam();
+
             }
         });
     }
@@ -235,13 +306,52 @@ public class MainActivity extends AppCompatActivity {
             cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
+                    ////Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
+                    //Drawable highlight = getResources().getDrawable(R.drawable.customborder);
+                    //view.setBackgroundDrawable(highlight);
+
+                    makeTextAndShow(getApplicationContext(), "你選擇的是 "+ view.getTag(), Toast.LENGTH_SHORT);
+
                 }
             });
             tempLocation = location;
         }
         location = Card.LOCATION_NULL;
+    }
 
+
+    private void setupCardsWithCam() {
+        currentCards.add(cards.get(0));
+        tempLocation = noLocation;
+        if (tempLocation != location) {
+            currentCards.clear();
+            currentCards.add(cards.get(0));
+            for (int i=1; i<cards.size(); i++){
+                if (cards.get(i).getLocation() == location){
+                    currentCards.add(cards.get(i));
+                }
+            }
+
+            cardAdapter = new CardListAdapter(location);
+            cardGV.setAdapter(cardAdapter);
+            // display card info while click card
+            cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ////Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
+                    //Drawable highlight = getResources().getDrawable(R.drawable.customborder);
+                    //view.setBackgroundDrawable(highlight);
+                    if(view.getTag() == "CAMERA") {
+                        takePhoto();
+                        //currentCards.add();
+                    }
+                    else
+                        makeTextAndShow(getApplicationContext(), "你選擇的是 "+ view.getTag(), Toast.LENGTH_SHORT);
+                }
+            });
+            tempLocation = location;
+        }
+        location = Card.LOCATION_DEFAULT;
     }
 
     private void setupGesture() {
@@ -332,7 +442,6 @@ public class MainActivity extends AppCompatActivity {
             ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(currentCard.getImagePath());
             // return card info to toast display
             itemView.setTag(currentCards.get(position).getName());
-
 
             return itemView;
         }
