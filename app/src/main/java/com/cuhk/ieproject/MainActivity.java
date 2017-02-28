@@ -23,7 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.cuhk.ieproject.model.Card;
 import com.cuhk.ieproject.model.User;
 import com.cuhk.ieproject.model.iBeacon;
@@ -93,6 +98,29 @@ public class MainActivity extends AppCompatActivity {
         setupSize();
         setupData();
         setupBeacon();
+
+//        final TextView mTextView = (TextView) findViewById(R.id.textView2);
+//
+//        // Instantiate the RequestQueue.
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String url ="https://192.168.65.80:8080/admin/api/login?username=admin&password=admin";
+//
+//        // Request a string response from the provided URL.
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // Display the first 500 characters of the response string.
+//                        mTextView.setText("Response is: "+ response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                mTextView.setText("That didn't work!");
+//            }
+//        });
+//        // Add the request to the RequestQueue.
+//        queue.add(stringRequest);
     }
 
 //    private void test() {

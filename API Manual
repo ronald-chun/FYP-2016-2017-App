@@ -1,0 +1,42 @@
+// ---- Login ----
+var http = new XMLHttpRequest();
+var url = "https://192.168.65.80:8080/admin/api/login";
+var params = "username=admin&password=admin";
+http.open("POST", url, true);
+
+//Send the proper header information along with the request
+http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+http.setRequestHeader("Content-length", params.length);
+http.setRequestHeader("Connection", "close");
+
+http.onreadystatechange = function() {//Call a function when the state changes.
+	if(http.readyState == 4 && http.status == 200) {
+		alert(http.responseText);
+	}
+}
+http.send(params);
+
+
+// ---- Add User -----
+var http = new XMLHttpRequest();
+var url = "https://192.168.56.101:8080/admin/api/user/add";
+var params = "pref=1&uname=Student_1";
+http.open("POST", url, true);
+
+//Send the proper header information along with the request
+http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+http.setRequestHeader("Content-length", params.length);
+http.setRequestHeader("Connection", "close");
+
+http.onreadystatechange = function() {//Call a function when the state changes.
+	if(http.readyState == 4 && http.status == 200) {
+		alert(http.responseText);
+	}
+}
+http.send(params);
+
+
+// ---- Use of API
+// Access image: https://192.168.65.80:8080/uploads/Hydrangeas.jpg
+// Access sound: https://192.168.65.80:8080/uploads/Kalimba.mp3
+// Test response: https://192.168.65.80:8080/admin/api/pic/edit
