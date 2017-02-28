@@ -13,6 +13,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -202,6 +203,13 @@ public class MainActivity extends AppCompatActivity {
 
             cardAdapter = new CardListAdapter(location);
             cardGV.setAdapter(cardAdapter);
+            // display card info while click card
+            cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
+                }
+            });
             tempLocation = location;
         }
         location = Card.LOCATION_NULL;
@@ -294,7 +302,8 @@ public class MainActivity extends AppCompatActivity {
             itemView.setLayoutParams(param);
 
             ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(currentCard.getImagePath());
-
+            // return card info to toast display
+            itemView.setTag(currentCards.get(position).getName());
 
 
             return itemView;
