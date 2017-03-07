@@ -11,23 +11,24 @@ public class Card {
     private int id;
     private int location;
     private String name;
-    private int imagePath;
+    private String imagePath;
     private int soundPath;
+    private boolean isPhoto;
 
     public static final int LOCATION_NULL = -1;
     public static final int LOCATION_PLAYGROUND = 0;
     public static final int LOCATION_CANTEEN = 1;
     public static final int LOCATION_CLASSROOM = 2;
     public static final int LOCATION_RUBBISH = 999;
-    public static final int LOCATION_DEFAULT = 3;
 
-    public Card(int id, int location, String name, int imagePath, int soundPath){
+    public Card(int id, int location, String name, String imagePath, int soundPath, boolean isPhoto){
         super();
         this.id = id;
         this.location = location;
         this.name = name;
         this.imagePath = imagePath;
         this.soundPath = soundPath;
+        this.isPhoto = isPhoto;
     }
 
     public int getId() {
@@ -42,7 +43,7 @@ public class Card {
         return name;
     }
 
-    public int getImagePath() {
+    public String getImagePath() {
         return imagePath;
     }
 
@@ -50,31 +51,35 @@ public class Card {
         return soundPath;
     }
 
+    public boolean isPhoto() {
+        return isPhoto;
+    }
+
     public static ArrayList<Card> dummy() {
         ArrayList<Card> cards = new ArrayList<>();
-        cards.add(new Card(-1, LOCATION_DEFAULT, "CAMERA", R.drawable.camera_icon, -1));
+        cards.add(new Card(0, LOCATION_PLAYGROUND, "籃球", "basketball", -1, false));
+        cards.add(new Card(1, LOCATION_PLAYGROUND, "足球", "football_ball", -1, false));
+        cards.add(new Card(2, LOCATION_PLAYGROUND, "乒乓球", "play_ping_pong", -1, false));
+        cards.add(new Card(3, LOCATION_PLAYGROUND, "網球", "tennis", -1, false));
+        cards.add(new Card(4, LOCATION_PLAYGROUND, "跑步", "to_run", -1, false));
+        cards.add(new Card(5, LOCATION_PLAYGROUND, "游水", "to_swim", -1, false));
+        cards.add(new Card(6, LOCATION_PLAYGROUND, "運動員", "athlete", -1, false));
+        cards.add(new Card(7, LOCATION_PLAYGROUND, "跳繩", "skipping_rope", -1, false));
 
-        cards.add(new Card(0, LOCATION_PLAYGROUND, "籃球", R.drawable.basketball, -1));
-        cards.add(new Card(1, LOCATION_PLAYGROUND, "足球", R.drawable.football_ball, -1));
-        cards.add(new Card(2, LOCATION_PLAYGROUND, "乒乓球", R.drawable.play_ping_pong, -1));
-        cards.add(new Card(3, LOCATION_PLAYGROUND, "網球", R.drawable.tennis, -1));
-        cards.add(new Card(4, LOCATION_PLAYGROUND, "跑步", R.drawable.to_run, -1));
-        cards.add(new Card(5, LOCATION_PLAYGROUND, "游水", R.drawable.to_swim, -1));
-        cards.add(new Card(6, LOCATION_PLAYGROUND, "運動員", R.drawable.athlete, -1));
-        cards.add(new Card(7, LOCATION_PLAYGROUND, "跳繩", R.drawable.skipping_rope, -1));
-
-        cards.add(new Card(8, LOCATION_CLASSROOM, "黑板", R.drawable.blackboard, -1));
-        cards.add(new Card(9, LOCATION_CLASSROOM, "書", R.drawable.book, -1));
-        cards.add(new Card(10, LOCATION_CLASSROOM, "計數機", R.drawable.calculator, -1));
-        cards.add(new Card(11, LOCATION_CLASSROOM, "字母", R.drawable.character, -1));
-        cards.add(new Card(12, LOCATION_CLASSROOM, "電腦", R.drawable.computers, -1));
-        cards.add(new Card(13, LOCATION_CLASSROOM, "畫", R.drawable.drawing, -1));
-        cards.add(new Card(14, LOCATION_CLASSROOM, "橡皮擦", R.drawable.erase, -1));
-        cards.add(new Card(15, LOCATION_CLASSROOM, "圖書館", R.drawable.library, -1));
-        cards.add(new Card(16, LOCATION_CLASSROOM, "黑板", R.drawable.blackboard, -1));
-        cards.add(new Card(17, LOCATION_CLASSROOM, "書", R.drawable.book, -1));
-        cards.add(new Card(18, LOCATION_CLASSROOM, "計數機", R.drawable.calculator, -1));
+        cards.add(new Card(8, LOCATION_CLASSROOM, "黑板", "blackboard", -1, false));
+        cards.add(new Card(9, LOCATION_CLASSROOM, "書", "book", -1, false));
+        cards.add(new Card(10, LOCATION_CLASSROOM, "計數機", "calculator", -1, false));
+        cards.add(new Card(11, LOCATION_CLASSROOM, "字母", "character", -1, false));
+        cards.add(new Card(12, LOCATION_CLASSROOM, "電腦", "computers", -1, false));
+        cards.add(new Card(13, LOCATION_CLASSROOM, "畫", "drawing", -1, false));
+        cards.add(new Card(14, LOCATION_CLASSROOM, "橡皮擦", "erase", -1, false));
+        cards.add(new Card(15, LOCATION_CLASSROOM, "圖書館", "library", -1, false));
+        cards.add(new Card(16, LOCATION_CLASSROOM, "黑板", "blackboard", -1, false));
+        cards.add(new Card(17, LOCATION_CLASSROOM, "書", "book", -1, false));
+        cards.add(new Card(18, LOCATION_CLASSROOM, "計數機", "calculator", -1, false));
 
         return  cards;
     }
 }
+
+

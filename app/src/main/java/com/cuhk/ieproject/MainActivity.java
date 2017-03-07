@@ -5,13 +5,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -21,44 +19,27 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.widget.ImageView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cuhk.ieproject.model.Card;
-import com.cuhk.ieproject.model.User;
 import com.cuhk.ieproject.model.iBeacon;
-import com.cuhk.ieproject.util.RequestWorker;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
-import java.util.UUID;
 
 import in.championswimmer.sfg.lib.SimpleFingerGestures;
-
-import static com.cuhk.ieproject.R.drawable.user;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
     int cardHeight;
     int colNum = 4;
 
+    int time = 1000;
+
     int MAX_VALUE = 2;
     int beaconSize;
     int location = Card.LOCATION_NULL;
-    int cam = Card.LOCATION_DEFAULT;
     int tempLocation = Card.LOCATION_NULL;
-    int noLocation = Card.LOCATION_DEFAULT;
 
     private static final int REQUEST_ENABLE_BT = 1234;
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
@@ -102,38 +83,10 @@ public class MainActivity extends AppCompatActivity {
     private static Toast toast;
     private static TextView toastText;
 
-    private static final int ACTIVITY_START_CAMERA_APP = 0;
-    private ImageView mPhotoCapturedImageView;
-    private String mImageFileLocation = "";
+    int CAMERA_REQUEST;
 
-    private void takePhoto() {
-        Intent callCameraApplicationIntent = new Intent();
-        callCameraApplicationIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile = null;
-        try{
-            photoFile = createImageFile();
-
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-        callCameraApplicationIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-
-        startActivityForResult(callCameraApplicationIntent, ACTIVITY_START_CAMERA_APP);
-    }
-
-    File createImageFile() throws IOException {
-        String imageFileName = "UserImage"+ "_";
-        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(imageFileName, ".jpg", storageDirectory);
-        mImageFileLocation = image.getAbsolutePath();
-
-        return image;
-
-    }
-
-    private static void makeTextAndShow(final Context context, final String text, final int duration){
-        if(toast==null){
+    private static void makeTextAndShow(final Context context, final String text, final int duration) {
+        if (toast == null) {
             final ViewGroup toastView = new FrameLayout(context);
             final FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             final GradientDrawable background = new GradientDrawable();
@@ -167,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         setupSize();
         setupData();
         setupBeacon();
-
+        setupListener();
 //        final TextView mTextView = (TextView) findViewById(R.id.textView2);
 //
 //        // Instantiate the RequestQueue.
@@ -218,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         ibeacons = iBeacon.dummy();
         beaconSize = ibeacons.size();
         locationScore = new Integer[beaconSize];
-        for (int position = 0; position < beaconSize; position++){
+        for (int position = 0; position < beaconSize; position++) {
             locationScore[position] = 0;
         }
     }
@@ -246,14 +199,14 @@ public class MainActivity extends AppCompatActivity {
                             nearestMacAddress = String.valueOf(nearestBeacon.getMacAddress());
                         }
 
-                        Log.e(TAG, " " +nearestMacAddress);
+                        Log.e(TAG, " " + nearestMacAddress);
 
                         if (nearestMacAddress != null) {
-                            for (int position = 0; position < beaconSize; position++){
+                            for (int position = 0; position < beaconSize; position++) {
                                 iBeacon currentiBeacon = ibeacons.get(position);
-                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())){
+                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())) {
                                     locationScore[position]++;
-                                }else{
+                                } else {
                                     locationScore[position] = 0;
                                 }
                             }
@@ -261,17 +214,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                for (int position = 0; position < beaconSize; position++){
-                    if (locationScore[position] >= MAX_VALUE){
+                for (int position = 0; position < beaconSize; position++) {
+                    if (locationScore[position] >= MAX_VALUE) {
                         location = ibeacons.get(position).getLocationID();
                     }
                 }
 
-//                if (location!= Card.LOCATION_NULL){
-//                    setupCards();
-//                }
-                setupCardsWithCam();
-
+                if (location != Card.LOCATION_NULL) {
+                    setupCards();
+                }
             }
         });
     }
@@ -281,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
         Display display = getWindowManager().getDefaultDisplay();
         height = display.getHeight();
-        cardHeight = height*3/2/colNum;
+        cardHeight = height * 3 / 2 / colNum;
 
 
         param = new AbsListView.LayoutParams(
@@ -294,64 +245,21 @@ public class MainActivity extends AppCompatActivity {
         if (tempLocation != location) {
             currentCards.clear();
 
-            for (int i=0; i<cards.size(); i++){
-                if (cards.get(i).getLocation() == location){
+            currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+            Log.e("cardSize", String.valueOf(cards.size()));
+
+            for (int i = 0; i < cards.size(); i++) {
+                Log.e("card", cards.get(i).toString());
+                if (cards.get(i).getLocation() == location) {
                     currentCards.add(cards.get(i));
                 }
             }
 
             cardAdapter = new CardListAdapter(location);
             cardGV.setAdapter(cardAdapter);
-            // display card info while click card
-            cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ////Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
-                    //Drawable highlight = getResources().getDrawable(R.drawable.customborder);
-                    //view.setBackgroundDrawable(highlight);
-
-                    makeTextAndShow(getApplicationContext(), "你選擇的是 "+ view.getTag(), Toast.LENGTH_SHORT);
-
-                }
-            });
             tempLocation = location;
         }
         location = Card.LOCATION_NULL;
-    }
-
-
-    private void setupCardsWithCam() {
-        currentCards.add(cards.get(0));
-        tempLocation = noLocation;
-        if (tempLocation != location) {
-            currentCards.clear();
-            currentCards.add(cards.get(0));
-            for (int i=1; i<cards.size(); i++){
-                if (cards.get(i).getLocation() == location){
-                    currentCards.add(cards.get(i));
-                }
-            }
-
-            cardAdapter = new CardListAdapter(location);
-            cardGV.setAdapter(cardAdapter);
-            // display card info while click card
-            cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ////Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
-                    //Drawable highlight = getResources().getDrawable(R.drawable.customborder);
-                    //view.setBackgroundDrawable(highlight);
-                    if(view.getTag() == "CAMERA") {
-                        takePhoto();
-                        //currentCards.add();
-                    }
-                    else
-                        makeTextAndShow(getApplicationContext(), "你選擇的是 "+ view.getTag(), Toast.LENGTH_SHORT);
-                }
-            });
-            tempLocation = location;
-        }
-        location = Card.LOCATION_DEFAULT;
     }
 
     private void setupGesture() {
@@ -373,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeLeft ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
                 Log.e("Test", "LEFT");
                 if (fingers >= 2) {
                     if (colNum >= 2) {
@@ -387,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeRight ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
                 Log.e("Test", "RIGHT");
                 if (fingers >= 2) {
                     if (colNum <= 8) {
@@ -401,17 +309,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onPinch ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onPinch(int fingers, long gestureDuration, double gestureDistance) {
                 return false;
             }
 
             @Override
-            public boolean onUnpinch ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
                 return false;
             }
 
             @Override
-            public boolean onDoubleTap ( int fingers){
+            public boolean onDoubleTap(int fingers) {
                 return false;
             }
         });
@@ -419,8 +327,33 @@ public class MainActivity extends AppCompatActivity {
         background.setOnTouchListener(mySfg);
     }
 
+    private void setupListener() {
+        cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File file = getFile();
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                    CAMERA_REQUEST = 9000 + tempLocation;
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                } else {
+                    if (currentCards.get(position).isPhoto()) {
+                        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                        intent.putExtra("path", currentCards.get(position).getImagePath());
+                        startActivity(intent);
+                    } else {
+                        makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCards.get(position).getName(), Toast.LENGTH_SHORT);
+                    }
+                }
+            }
+        });
+    }
+
+
     private class CardListAdapter extends ArrayAdapter<Card> {
         int location;
+
 
         public CardListAdapter(int location) {
             super(MainActivity.this, R.layout.card_item, currentCards);
@@ -429,19 +362,21 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.e("request", "YES");
-            Card currentCard = currentCards.get(position);
             View itemView = convertView;
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
-
             }
 
+            Card currentCard = currentCards.get(position);
             itemView.setLayoutParams(param);
 
-            ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(currentCard.getImagePath());
-            // return card info to toast display
-            itemView.setTag(currentCards.get(position).getName());
+            if (currentCard.isPhoto()) {
+                Bitmap bitmap = decodeSampledBitmapFromFile(currentCard.getImagePath(), 1000, 700);
+                ((ImageView) itemView.findViewById(R.id.card_image)).setImageBitmap(bitmap);
+            } else {
+                int resId = getResources().getIdentifier(currentCard.getImagePath(), "drawable", getPackageName());
+                ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(resId);
+            }
 
             return itemView;
         }
@@ -460,8 +395,8 @@ public class MainActivity extends AppCompatActivity {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Device does not have Bluetooth Low Energy", Toast.LENGTH_LONG).show();
-        }else{
-            if (!bluetoothAdapter.isEnabled()){
+        } else {
+            if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {
@@ -489,6 +424,17 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
             }
+        } else if (requestCode >= 9000) {
+            if (resultCode == Activity.RESULT_OK) {
+                int size = cards.size() + 1;
+
+                String filename = String.valueOf(size) + ".jpg";
+                String path = "sdcard/ie_project/" + filename;
+                int photoLocation = requestCode - 9000;
+                Log.e("photoLocation", String.valueOf(photoLocation));
+                cards.add(new Card(size, photoLocation, "", path, -1, true));
+                setupCards();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -507,6 +453,70 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private File getFile() {
+        File folder = new File("sdcard/ie_project");
+
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        String filename = String.valueOf(cards.size() + 1) + ".jpg";
+
+        File imageFile = new File(folder, filename);
+
+        return imageFile;
+    }
+
+//    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
+//
+//        //First decode with inJustDecodeBounds=true to check dimensions
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(path, options);
+//
+//        // Calculate inSampleSize, Raw height and width of image
+//        final int height = options.outHeight;
+//        final int width = options.outWidth;
+//        options.inPreferredConfig = Bitmap.Config.RGB_565;
+//        int inSampleSize = 1;
+//
+//        if (height > reqHeight) {
+//            inSampleSize = Math.round((float) height / (float) reqHeight);
+//        }
+//        int expectedWidth = width / inSampleSize;
+//
+//        if (expectedWidth > reqWidth) {
+//            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+//            inSampleSize = Math.round((float) width / (float) reqWidth);
+//        }
+//
+//        options.inSampleSize = inSampleSize;
+//
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//
+//        return BitmapFactory.decodeFile(path, options);
+//    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
+        int targetImageViewWidth = reqWidth;
+        int targetImageViewHeight =  reqHeight;
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+
+        Bitmap photoReducedSizeBitmap = BitmapFactory.decodeFile(path, bmOptions);
+        return photoReducedSizeBitmap;
+    }
+
 }
 //28/2/2017/
 //28/2/2017 kobe
