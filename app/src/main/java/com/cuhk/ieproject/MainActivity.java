@@ -327,6 +327,38 @@ public class MainActivity extends AppCompatActivity {
         background.setOnTouchListener(mySfg);
     }
 
+    private File getFile() {
+        File folder = new File("sdcard/ie_project");
+
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        String filename = String.valueOf(cards.size() + 1) + ".jpg";
+
+        File imageFile = new File(folder, filename);
+
+        return imageFile;
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
+        int targetImageViewWidth = reqWidth;
+        int targetImageViewHeight =  reqHeight;
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+
+        Bitmap photoReducedSizeBitmap = BitmapFactory.decodeFile(path, bmOptions);
+        return photoReducedSizeBitmap;
+    }
+
     private void setupListener() {
         cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -339,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 } else {
                     if (currentCards.get(position).isPhoto()) {
-                        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                        Intent intent = new Intent(MainActivity.this, ShowPhotoActivity.class);
                         intent.putExtra("path", currentCards.get(position).getImagePath());
                         startActivity(intent);
                     } else {
@@ -454,68 +486,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private File getFile() {
-        File folder = new File("sdcard/ie_project");
-
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-
-        String filename = String.valueOf(cards.size() + 1) + ".jpg";
-
-        File imageFile = new File(folder, filename);
-
-        return imageFile;
-    }
-
-//    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
-//
-//        //First decode with inJustDecodeBounds=true to check dimensions
-//        final BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(path, options);
-//
-//        // Calculate inSampleSize, Raw height and width of image
-//        final int height = options.outHeight;
-//        final int width = options.outWidth;
-//        options.inPreferredConfig = Bitmap.Config.RGB_565;
-//        int inSampleSize = 1;
-//
-//        if (height > reqHeight) {
-//            inSampleSize = Math.round((float) height / (float) reqHeight);
-//        }
-//        int expectedWidth = width / inSampleSize;
-//
-//        if (expectedWidth > reqWidth) {
-//            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
-//            inSampleSize = Math.round((float) width / (float) reqWidth);
-//        }
-//
-//        options.inSampleSize = inSampleSize;
-//
-//        // Decode bitmap with inSampleSize set
-//        options.inJustDecodeBounds = false;
-//
-//        return BitmapFactory.decodeFile(path, options);
-//    }
-
-    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
-        int targetImageViewWidth = reqWidth;
-        int targetImageViewHeight =  reqHeight;
-
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, bmOptions);
-        int cameraImageWidth = bmOptions.outWidth;
-        int cameraImageHeight = bmOptions.outHeight;
-
-        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inJustDecodeBounds = false;
-
-        Bitmap photoReducedSizeBitmap = BitmapFactory.decodeFile(path, bmOptions);
-        return photoReducedSizeBitmap;
-    }
 
 }
 //28/2/2017/

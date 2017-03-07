@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CameraActivity"
+        <activity android:name=".ShowPhotoActivity"
             android:screenOrientation="landscape" />
     </application>
 
