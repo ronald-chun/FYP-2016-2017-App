@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -324,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         background.setOnTouchListener(mySfg);
-        background.setOnTouchListener(mySfg);
+        //background.setOnTouchListener(mySfg);
     }
 
     private File getFile() {
@@ -375,6 +376,8 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("path", currentCards.get(position).getImagePath());
                         startActivity(intent);
                     } else {
+                        Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        vibe.vibrate(100);
                         makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCards.get(position).getName(), Toast.LENGTH_SHORT);
                     }
                 }
@@ -485,7 +488,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }
 //28/2/2017/
