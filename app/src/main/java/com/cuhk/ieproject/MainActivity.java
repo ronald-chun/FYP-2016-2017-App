@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -26,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -34,10 +34,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import com.cuhk.ieproject.model.Card;
-import com.cuhk.ieproject.model.User;
 import com.cuhk.ieproject.model.iBeacon;
-import com.cuhk.ieproject.util.RequestWorker;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
@@ -45,6 +47,7 @@ import com.estimote.sdk.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 //import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -56,6 +59,7 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.List;
@@ -69,8 +73,6 @@ import javax.net.ssl.X509TrustManager;
 
 import in.championswimmer.sfg.lib.SimpleFingerGestures;
 import info.guardianproject.netcipher.NetCipher;
-
-import static com.cuhk.ieproject.R.drawable.user;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -88,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     int width;
     int cardHeight;
     int colNum = 4;
+
+    int time = 1000;
 
     int MAX_VALUE = 2;
     int beaconSize;
@@ -110,6 +114,33 @@ public class MainActivity extends AppCompatActivity {
     private SimpleFingerGestures mySfg = new SimpleFingerGestures();
 
     ImageView imageView;
+    private static Toast toast;
+    private static TextView toastText;
+
+    int CAMERA_REQUEST;
+
+    private static void makeTextAndShow(final Context context, final String text, final int duration) {
+        if (toast == null) {
+            final ViewGroup toastView = new FrameLayout(context);
+            final FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            final GradientDrawable background = new GradientDrawable();
+            toastText = new TextView(context);
+            toastText.setLayoutParams(flp);
+            toastText.setSingleLine(false);
+            toastText.setTextSize(30);
+            toastText.setTextColor(Color.argb(0xAA, 0xFF, 0xFF, 0xFF)); // white text
+            background.setColor(Color.argb(0xAA, 0x00, 0xAA, 0x00)); // red toast
+            background.setCornerRadius(50); // toast round corner
+            toastView.setPadding(60, 60, 60, 60);
+            toastView.addView(toastText);
+            toastView.setBackgroundDrawable(background);
+            toast = new Toast(context);
+            toast.setView(toastView);
+        }
+        toastText.setText(text);
+        toast.setDuration(duration);
+        toast.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,16 +156,39 @@ public class MainActivity extends AppCompatActivity {
         setupBeacon();
         HttpsTrustManager.allowAllSSL();
 
-
         // Create global configuration and initialize ImageLoader with this config
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
-        String url = "https://192.168.65.80:8080/uploads/Desert.jpg";
+//        String url = "https://192.168.65.80:8080/uploads/Desert.jpg";
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+//        imageView = (ImageView) findViewById(R.id.imageView);
 //        Picasso.with(getBaseContext()).load("https://192.168.65.80:8080/uploads/hot_dog.png").into(imageView);
-        ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
-        imageLoader.displayImage(url, imageView);
+//        ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+//        imageLoader.displayImage(url, imageView);
+
+        setupListener();
+//        final TextView mTextView = (TextView) findViewById(R.id.textView2);
+//
+//        // Instantiate the RequestQueue.
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String url ="https://192.168.65.80:8080/admin/api/login?username=admin&password=admin";
+//
+//        // Request a string response from the provided URL.
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // Display the first 500 characters of the response string.
+//                        mTextView.setText("Response is: "+ response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                mTextView.setText("That didn't work!");
+//            }
+//        });
+//        // Add the request to the RequestQueue.
+//        queue.add(stringRequest);
     }
 
 //    private void test() {
@@ -163,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         ibeacons = iBeacon.dummy();
         beaconSize = ibeacons.size();
         locationScore = new Integer[beaconSize];
-        for (int position = 0; position < beaconSize; position++){
+        for (int position = 0; position < beaconSize; position++) {
             locationScore[position] = 0;
         }
     }
@@ -191,14 +245,14 @@ public class MainActivity extends AppCompatActivity {
                             nearestMacAddress = String.valueOf(nearestBeacon.getMacAddress());
                         }
 
-                        Log.e(TAG, " " +nearestMacAddress);
+                        Log.e(TAG, " " + nearestMacAddress);
 
                         if (nearestMacAddress != null) {
-                            for (int position = 0; position < beaconSize; position++){
+                            for (int position = 0; position < beaconSize; position++) {
                                 iBeacon currentiBeacon = ibeacons.get(position);
-                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())){
+                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())) {
                                     locationScore[position]++;
-                                }else{
+                                } else {
                                     locationScore[position] = 0;
                                 }
                             }
@@ -206,13 +260,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                for (int position = 0; position < beaconSize; position++){
-                    if (locationScore[position] >= MAX_VALUE){
+                for (int position = 0; position < beaconSize; position++) {
+                    if (locationScore[position] >= MAX_VALUE) {
                         location = ibeacons.get(position).getLocationID();
                     }
                 }
 
-                if (location!= Card.LOCATION_NULL){
+                if (location != Card.LOCATION_NULL) {
                     setupCards();
                 }
             }
@@ -224,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
         Display display = getWindowManager().getDefaultDisplay();
         height = display.getHeight();
-        cardHeight = height*3/2/colNum;
+        cardHeight = height * 3 / 2 / colNum;
 
 
         param = new AbsListView.LayoutParams(
@@ -237,25 +291,21 @@ public class MainActivity extends AppCompatActivity {
         if (tempLocation != location) {
             currentCards.clear();
 
-            for (int i=0; i<cards.size(); i++){
-                if (cards.get(i).getLocation() == location){
+            currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+            Log.e("cardSize", String.valueOf(cards.size()));
+
+            for (int i = 0; i < cards.size(); i++) {
+                Log.e("card", cards.get(i).toString());
+                if (cards.get(i).getLocation() == location) {
                     currentCards.add(cards.get(i));
                 }
             }
 
             cardAdapter = new CardListAdapter(location);
             cardGV.setAdapter(cardAdapter);
-            // display card info while click card
-            cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getApplicationContext(), "This is "+ view.getTag(), Toast.LENGTH_SHORT).show();
-                }
-            });
             tempLocation = location;
         }
         location = Card.LOCATION_NULL;
-
     }
 
     private void setupGesture() {
@@ -277,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeLeft ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
                 Log.e("Test", "LEFT");
                 if (fingers >= 2) {
                     if (colNum >= 2) {
@@ -291,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onSwipeRight ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
                 Log.e("Test", "RIGHT");
                 if (fingers >= 2) {
                     if (colNum <= 8) {
@@ -305,26 +355,85 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onPinch ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onPinch(int fingers, long gestureDuration, double gestureDistance) {
                 return false;
             }
 
             @Override
-            public boolean onUnpinch ( int fingers, long gestureDuration, double gestureDistance){
+            public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
                 return false;
             }
 
             @Override
-            public boolean onDoubleTap ( int fingers){
+            public boolean onDoubleTap(int fingers) {
                 return false;
             }
         });
         background.setOnTouchListener(mySfg);
-        background.setOnTouchListener(mySfg);
+        //background.setOnTouchListener(mySfg);
     }
+
+    private File getFile() {
+        File folder = new File("sdcard/ie_project");
+
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        String filename = String.valueOf(cards.size() + 1) + ".jpg";
+
+        File imageFile = new File(folder, filename);
+
+        return imageFile;
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
+        int targetImageViewWidth = reqWidth;
+        int targetImageViewHeight =  reqHeight;
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth/targetImageViewWidth, cameraImageHeight/targetImageViewHeight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+
+        Bitmap photoReducedSizeBitmap = BitmapFactory.decodeFile(path, bmOptions);
+        return photoReducedSizeBitmap;
+    }
+
+    private void setupListener() {
+        cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File file = getFile();
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                    CAMERA_REQUEST = 9000 + tempLocation;
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                } else {
+                    if (currentCards.get(position).isPhoto()) {
+                        Intent intent = new Intent(MainActivity.this, ShowPhotoActivity.class);
+                        intent.putExtra("path", currentCards.get(position).getImagePath());
+                        startActivity(intent);
+                    } else {
+                        Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        vibe.vibrate(100);
+                        makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCards.get(position).getName(), Toast.LENGTH_SHORT);
+                    }
+                }
+            }
+        });
+    }
+
 
     private class CardListAdapter extends ArrayAdapter<Card> {
         int location;
+
 
         public CardListAdapter(int location) {
             super(MainActivity.this, R.layout.card_item, currentCards);
@@ -333,20 +442,26 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.e("request", "YES");
-            Card currentCard = currentCards.get(position);
             View itemView = convertView;
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
-
             }
 
+            Card currentCard = currentCards.get(position);
             itemView.setLayoutParams(param);
 
-            ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(currentCard.getImagePath());
-            // return card info to toast display
-            itemView.setTag(currentCards.get(position).getName());
+            Log.e("isPhoto()", String.valueOf(currentCard.isPhoto()));
 
+            if (currentCard.isPhoto()) {
+                Bitmap bitmap = decodeSampledBitmapFromFile(currentCard.getImagePath(), 1000, 700);
+                ((ImageView) itemView.findViewById(R.id.card_image)).setImageBitmap(bitmap);
+            } else if ((currentCard.getImagePath().substring(0, 4)).equals("http")) {
+                ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+                imageLoader.displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image)));
+            } else {
+                int resId = getResources().getIdentifier(currentCard.getImagePath(), "drawable", getPackageName());
+                ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(resId);
+            }
 
             return itemView;
         }
@@ -365,8 +480,8 @@ public class MainActivity extends AppCompatActivity {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Device does not have Bluetooth Low Energy", Toast.LENGTH_LONG).show();
-        }else{
-            if (!bluetoothAdapter.isEnabled()){
+        } else {
+            if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {
@@ -394,6 +509,17 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
             }
+        } else if (requestCode >= 9000) {
+            if (resultCode == Activity.RESULT_OK) {
+                int size = cards.size() + 1;
+
+                String filename = String.valueOf(size) + ".jpg";
+                String path = "sdcard/ie_project/" + filename;
+                int photoLocation = requestCode - 9000;
+                Log.e("photoLocation", String.valueOf(photoLocation));
+                cards.add(new Card(size, photoLocation, "", path, -1, true));
+                setupCards();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -412,6 +538,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
 //28/2/2017/
 //28/2/2017 kobe
+//28/2/2017/ fai
