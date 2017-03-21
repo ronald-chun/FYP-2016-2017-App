@@ -68,18 +68,18 @@ public class Card {
         cards.add(new Card(8, LOCATION_PLAYGROUND, "跳繩", "skipping_rope", -1, false));
 
 
-        cards.add(new Card(8, LOCATION_CLASSROOM, "黑板", "blackboard", -1, false));
-        cards.add(new Card(9, LOCATION_CLASSROOM, "書", "book", -1, false));
-        cards.add(new Card(10, LOCATION_CLASSROOM, "計數機", "calculator", -1, false));
-        cards.add(new Card(11, LOCATION_CLASSROOM, "字母", "character", -1, false));
-        cards.add(new Card(12, LOCATION_CLASSROOM, "電腦", "computers", -1, false));
-        cards.add(new Card(13, LOCATION_CLASSROOM, "畫", "drawing", -1, false));
-        cards.add(new Card(14, LOCATION_CLASSROOM, "橡皮擦", "erase", -1, false));
-        cards.add(new Card(15, LOCATION_CLASSROOM, "圖書館", "library", -1, false));
-        cards.add(new Card(16, LOCATION_CLASSROOM, "黑板", "blackboard", -1, false));
-        cards.add(new Card(17, LOCATION_CLASSROOM, "書", "book", -1, false));
-        cards.add(new Card(18, LOCATION_CLASSROOM, "Test", "https://192.168.65.80:8080/uploads/Desert.jpg", -1, false));
-        cards.add(new Card(19, LOCATION_CLASSROOM, "計數機", "calculator", -1, false));
+        cards.add(new Card(9, LOCATION_CLASSROOM, "黑板", "blackboard", -1, false));
+        cards.add(new Card(10, LOCATION_CLASSROOM, "書", "book", -1, false));
+        cards.add(new Card(11, LOCATION_CLASSROOM, "計數機", "calculator", -1, false));
+        cards.add(new Card(12, LOCATION_CLASSROOM, "字母", "character", -1, false));
+        cards.add(new Card(13, LOCATION_CLASSROOM, "電腦", "computers", -1, false));
+        cards.add(new Card(14, LOCATION_CLASSROOM, "畫", "drawing", -1, false));
+        cards.add(new Card(15, LOCATION_CLASSROOM, "橡皮擦", "erase", -1, false));
+        cards.add(new Card(16, LOCATION_CLASSROOM, "圖書館", "library", -1, false));
+        cards.add(new Card(17, LOCATION_CLASSROOM, "黑板", "blackboard", -1, false));
+        cards.add(new Card(18, LOCATION_CLASSROOM, "書", "book", -1, false));
+        cards.add(new Card(19, LOCATION_CLASSROOM, "Test", "https://192.168.65.99:8080/uploads/Desert.jpg", -1, false));
+        cards.add(new Card(20, LOCATION_CLASSROOM, "計數機", "calculator", -1, false));
 
         return  cards;
     }
