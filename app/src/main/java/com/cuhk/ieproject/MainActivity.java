@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -90,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
     int width;
     int cardHeight;
     int colNum = 4;
+    int doubleCK = 0;
+
+    private Session session;
+    private Button btnSetting;
 
     int time = 1000;
 
@@ -189,6 +195,41 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //        // Add the request to the RequestQueue.
 //        queue.add(stringRequest);
+
+
+
+        session = new Session(this);
+        if(!session.loggedin()){
+            logout();
+        }
+        btnSetting = (Button)findViewById(R.id.btnSetting);
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doubleCK++;
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(doubleCK == 1){
+                            Toast.makeText(MainActivity.this,"Single  Click",Toast.LENGTH_SHORT).show();
+                        }else if(doubleCK == 2){
+                            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                        }
+                        doubleCK = 0;
+                    }
+                },500);
+
+            }
+        });
+    }
+
+
+    private void logout(){
+        session.setLoggedin(false);
+        finish();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
 //    private void test() {

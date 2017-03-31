@@ -19,6 +19,14 @@
         <!--app:srcCompat="@android:color/background_dark"-->
         <!--android:id="@+id/imageView" />-->
 
+
+    <Button
+        android:id="@+id/btnSetting"
+        android:layout_width="36dp"
+        android:layout_height="185dp"
+        android:text="Setting"
+        android:layout_weight="0.14" />
+
     <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
