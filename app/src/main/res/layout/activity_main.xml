@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="64dp"
-    android:paddingRight="64dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     android:background="@color/lightblue"
@@ -14,39 +14,42 @@
 
 
     <!--<ImageView-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--app:srcCompat="@android:color/background_dark"-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="100dp"-->
+    <!--app:srcCompat="@android:color/background_dark"-->
 
-    <Button
-        android:id="@+id/btnSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Setting"
-        android:layout_gravity="end|bottom"
-        android:layout_weight="0.14" />
-
-    <GridView
-        android:id="@+id/card_list"
+    <!--<Button-->
+    <!--android:id="@+id/btnSetting"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Setting"-->
+    <!--android:layout_gravity="end|bottom"-->
+    <!--android:layout_weight="0.14" />-->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.68"
-        android:clipToPadding="false"
-        android:horizontalSpacing="20dp"
-        android:numColumns="4"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:scrollbars="none"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="20dp" />
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_dialog_info" />
+        <GridView
+            android:id="@+id/card_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.68"
+            android:clipToPadding="false"
+            android:horizontalSpacing="20dp"
+            android:numColumns="4"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="20dp" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@android:drawable/ic_menu_edit" />
+    </FrameLayout>
 </LinearLayout>

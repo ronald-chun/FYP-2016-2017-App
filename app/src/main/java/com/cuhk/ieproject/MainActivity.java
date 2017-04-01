@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
     private Session session;
     private Button btnSetting;
 
+    private Setting mySetting;
+
     int time = 1000;
 
     int MAX_VALUE = 2;
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     private static TextView toastText;
 
     int CAMERA_REQUEST;
+    private static final int SETTING_REQUEST = 8000;
 
     private static void makeTextAndShow(final Context context, final String text, final int duration) {
         if (toast == null) {
@@ -155,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 //        test();
+        mySetting = new Setting(this);
+        session = new Session(this);
+        if(!session.loggedin()){
+            logout();
+        }
         setContentView(R.layout.activity_main);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Confirm", new View.OnClickListener(){
                             @Override
                             public void onClick(View view) {
-                                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                                startActivityForResult(settingIntent, SETTING_REQUEST);
                             }
                         }).show();
             }
@@ -212,31 +221,28 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        session = new Session(this);
-        if(!session.loggedin()){
-            logout();
-        }
-        btnSetting = (Button)findViewById(R.id.btnSetting);
-        btnSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doubleCK++;
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(doubleCK == 1){
-                            Toast.makeText(MainActivity.this,"Single  Click",Toast.LENGTH_SHORT).show();
-                        }else if(doubleCK == 2){
-                            startActivity(new Intent(MainActivity.this, SettingActivity.class));
-                        }
-                        doubleCK = 0;
-                    }
-                },500);
-
-            }
-        });
+//        btnSetting = (Button)findViewById(R.id.btnSetting);
+//        btnSetting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                doubleCK++;
+//
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if(doubleCK == 1){
+//                            Toast.makeText(MainActivity.this,"Single  Click",Toast.LENGTH_SHORT).show();
+//                        }else if(doubleCK == 2){
+//                            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+//                        }
+//                        doubleCK = 0;
+//                    }
+//                },500);
+//
+//            }
+//        });
     }
 
 
@@ -346,7 +352,10 @@ public class MainActivity extends AppCompatActivity {
         if (tempLocation != location) {
             currentCards.clear();
 
-            currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+            if(mySetting.camera()){
+                currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+            }
+
             Log.e("cardSize", String.valueOf(cards.size()));
 
             for (int i = 0; i < cards.size(); i++) {
@@ -563,6 +572,10 @@ public class MainActivity extends AppCompatActivity {
                 connectToService();
             } else {
                 Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
+            }
+        } else if(requestCode == 8000){
+            if (resultCode == Activity.RESULT_OK) {
+                setupCards();
             }
         } else if (requestCode >= 9000) {
             if (resultCode == Activity.RESULT_OK) {
