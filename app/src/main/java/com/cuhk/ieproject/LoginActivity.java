@@ -13,6 +13,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText etID, etPassword;
     private Check check;
     private Session session;
+    private Setting mySetting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +51,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void login(){
         String id = etID.getText().toString();
         String password = etPassword.getText().toString();
-        if (check.getUser(id, password)){
+        if (check.verifyUser(id, password)){
             session.setLoggedin(true);
+            mySetting.setUsername(id);
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         } else{

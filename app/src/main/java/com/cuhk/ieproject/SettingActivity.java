@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
     Session session;
+    TextView user_name;
+    String username;
     Button btnLogout;
     Switch cameraSwitch;
     TextView cardSizeVal;
@@ -46,9 +48,9 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void initComponent(){
+        user_name = (TextView)findViewById(R.id.user_name_val);
+        user_name.setText(mySetting.getUsername());
         btnLogout = (Button)findViewById(R.id.btnLogout);
-//        enableCamera = (Button)findViewById(R.id.enableCamera);
-//        disableCamera= (Button)findViewById(R.id.disableCamera);
         cameraSwitch = (Switch)findViewById(R.id.cameraSwitch);
         if(mySetting.camera()){
             cameraSwitch.setChecked(true);
@@ -86,8 +88,11 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(fromUser){
-                    cardSizeSeekProgress = progress;
+                    if(progress==0){
+                        cardSizeSeekProgress = progress + 1;
+                    } else cardSizeSeekProgress = progress;
                     cardSizeVal.setText(cardSizeSeekProgress+"/"+cardSizeSeekbar.getMax());
+                    mySetting.setCardSize(cardSizeSeekProgress);
                 }
             }
 
@@ -98,7 +103,8 @@ public class SettingActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                cardSizeVal.setText(cardSizeSeekProgress+"/"+cardSizeSeekbar.getMax());
+//                cardSizeVal.setText(cardSizeSeekProgress+"/"+cardSizeSeekbar.getMax());
+//                mySetting.setCardSize(cardSizeSeekProgress);
             }
         });
     }

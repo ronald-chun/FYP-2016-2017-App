@@ -11,6 +11,7 @@ public class Session {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     Context ctx;
+    private Check check;
 
     public Session(Context ctx){
         this.ctx = ctx;

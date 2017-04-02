@@ -14,7 +14,7 @@ public class Check {
 
     }
 
-    public boolean getUser(String id, String password){
+    public boolean verifyUser(String id, String password){
         if(id. equals(trueID) && password.equals(truePass)){
             return true;
         } else{

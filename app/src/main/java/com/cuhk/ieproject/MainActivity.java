@@ -335,11 +335,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSize() {
-        cardGV.setNumColumns(colNum);
-
+//        cardGV.setNumColumns(colNum);
+        cardGV.setNumColumns(mySetting.getCardSize());
         Display display = getWindowManager().getDefaultDisplay();
         height = display.getHeight();
-        cardHeight = height * 3 / 2 / colNum;
+//        cardHeight = height * 3 / 2 / colNum;
+        cardHeight = height * 3 / 2 / mySetting.getCardSize();
 
 
         param = new AbsListView.LayoutParams(
@@ -392,29 +393,29 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
-                Log.e("Test", "LEFT");
-                if (fingers >= 2) {
-                    if (colNum >= 2) {
-                        colNum = colNum - 1;
-                        setupSize();
-                        setupCards();
-                    }
-
-                }
+//                Log.e("Test", "LEFT");
+//                if (fingers >= 2) {
+//                    if (colNum >= 2) {
+//                        colNum = colNum - 1;
+//                        setupSize();
+//                        setupCards();
+//                    }
+//
+//                }
                 return false;
             }
 
             @Override
             public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
-                Log.e("Test", "RIGHT");
-                if (fingers >= 2) {
-                    if (colNum <= 8) {
-                        colNum = colNum + 1;
-                        setupSize();
-                        setupCards();
-                    }
-
-                }
+//                Log.e("Test", "RIGHT");
+//                if (fingers >= 2) {
+//                    if (colNum <= 8) {
+//                        colNum = colNum + 1;
+//                        setupSize();
+//                        setupCards();
+//                    }
+//
+//                }
                 return false;
             }
 
@@ -575,6 +576,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if(requestCode == 8000){
             if (resultCode == Activity.RESULT_OK) {
+                setupSize();
                 setupCards();
             }
         } else if (requestCode >= 9000) {

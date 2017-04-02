@@ -19,6 +19,15 @@ public class Setting {
         editor = settings.edit();
     }
 
+    public void setUsername(String username){
+        editor.putString("username", username);
+        editor.commit();
+    }
+
+    public String getUsername(){
+        return settings.getString("username", "");
+    }
+
     public void setEnableCamera(boolean enableCamera){
         editor.putBoolean("enableCameraMode", enableCamera);
         editor.commit();
@@ -27,7 +36,15 @@ public class Setting {
     public boolean camera() {
         return settings.getBoolean("enableCameraMode", false);
     }
-    
+
+    public void setCardSize(int cardSize){
+        editor.putInt("cardSize", cardSize);
+        editor.commit();
+    }
+
+    public int getCardSize(){
+        return settings.getInt("cardSize", 4);
+    }
 }
 
 
