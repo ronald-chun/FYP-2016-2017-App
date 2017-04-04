@@ -40,7 +40,7 @@ import java.util.Map;
  * Created by anson on 1/9/2016.
  */
 public class RequestWorker {
-    public static final String baseUrl ="http://cantoneseopera.uthinktech.com";
+    public static final String baseUrl ="https://192.168.65.99:8080/app/api/";
     public static final String apiUrl = baseUrl;
 
     private static RequestWorker mInstance;

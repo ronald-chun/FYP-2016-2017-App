@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.cuhk.ieproject.util.RequestWorker;
 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -63,25 +64,19 @@ public class User {
         this.sizeLevel = sizeLevel;
     }
 
-    public static class TestRequest extends RequestWorker.PostRequest<JSONObject>{
-        private static final String path = "/admin";
+    public static class LoginRequest extends RequestWorker.PostRequest<JSONObject> {
+        private static final String path = "/user/8";
 
-        public TestRequest(final Context context, final Response.Listener<JSONObject> listener, final RequestWorker.ErrorListener errorListener) {
+        public LoginRequest(final Context context, Response.Listener<JSONObject> listener, RequestWorker.ErrorListener errorListener){
             super(context, path, new HashMap<String, String>(){{
-                put("1","2");
             }}, listener, errorListener);
         }
 
         @Override
         public JSONObject convertResponse(JSONObject jsonObject) {
-
-            try {
-                Log.v("ASD","ASDSAD");
-                return jsonObject ;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+            JSONObject resultObj = null;
+            resultObj = jsonObject;
+            return resultObj;
         }
     }
 }

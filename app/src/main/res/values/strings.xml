@@ -3,4 +3,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="loading">Loading</string>
+    <string name="loading_content">Please Wait...</string>
+    <string name="error_ok">確定</string>
+    <string name="error_title">錯誤</string>
 </resources>
