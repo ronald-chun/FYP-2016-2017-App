@@ -3,4 +3,8 @@
     <color name="white">#FFFFFF</color>
 
     <color name="lightblue">#58e7ec</color>
+
+    <color name="red">#FF0000</color>
+
+    <color name="yellow">#FFC830</color>
 </resources>
