@@ -13,25 +13,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
-import com.cuhk.ieproject.R;
 
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +33,7 @@ import java.util.Map;
  * Created by anson on 1/9/2016.
  */
 public class RequestWorker {
-    public static final String baseUrl ="https://192.168.65.99:8080/app/api/";
+    public static final String baseUrl ="https://192.168.65.99:8080/app/api";
     public static final String apiUrl = baseUrl;
 
     private static RequestWorker mInstance;

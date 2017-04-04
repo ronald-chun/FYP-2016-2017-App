@@ -9,14 +9,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
-import android.net.SSLCertificateSocketFactory;
-import android.net.SSLSessionCache;
+import android.net.Uri;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
-import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,20 +32,9 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
+
 import com.cuhk.ieproject.model.Card;
 import com.cuhk.ieproject.model.iBeacon;
 import com.estimote.sdk.Beacon;
@@ -53,34 +43,28 @@ import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-//import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.List;
-import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import in.championswimmer.sfg.lib.SimpleFingerGestures;
-import info.guardianproject.netcipher.NetCipher;
+
+//import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
@@ -95,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     String nearestMinor;
     String nearestMeasuredPower;
     String nearestRssi;
+    String response;
+    String api_loc = "loc/B9407F30-F5F8-466E-AFF9-25556B57FE6D/";
 
     GridView cardGV;
 
@@ -343,12 +329,15 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                         }
 
+                        requestLocationCards postLoc = (requestLocationCards) new requestLocationCards();
+                        postLoc.execute(api_loc, nearestMajor, "/", nearestMinor);
+
                         Log.e(TAG, " " + nearestMacAddress + " " + nearestMajor + ":" + nearestMinor + " " + nearestMeasuredPower + " " + nearestRssi);
 
-                        if (nearestMacAddress != null) {
+                        if (nearestMajor != null) {
                             for (int position = 0; position < beaconSize; position++) {
                                 iBeacon currentiBeacon = ibeacons.get(position);
-                                if (nearestMacAddress.equals(currentiBeacon.getMacAddress())) {
+                                if (nearestMajor.equals(currentiBeacon.getMajor())) {
                                     locationScore[position]++;
                                 } else {
                                     locationScore[position] = 0;
@@ -358,15 +347,15 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     }
                 });
 
-                for (int position = 0; position < beaconSize; position++) {
-                    if (locationScore[position] >= MAX_VALUE) {
-                        location = ibeacons.get(position).getLocationID();
-                    }
-                }
-
-                if (location != Card.LOCATION_NULL) {
-                    setupCards();
-                }
+//                for (int position = 0; position < beaconSize; position++) {
+//                    if (locationScore[position] >= MAX_VALUE) {
+//                        location = ibeacons.get(position).getLocationID();
+//                    }
+//                }
+//
+//                if (location != Card.LOCATION_NULL) {
+//                    setupCards();
+//                }
             }
         });
     }
@@ -429,12 +418,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
     }
 
-    private void setupCards() {
+    private void setupCards(int location) {
         if (tempLocation != location) {
             currentCards.clear();
 
             if(mySetting.camera()){
-                currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+                currentCards.add(new Card(location, -1, "相機", "camera_icon", "/uploads/test.mp3", "camera icon", false));
             }
 
             Log.e("cardSize", String.valueOf(cards.size()));
@@ -450,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             cardGV.setAdapter(cardAdapter);
             tempLocation = location;
         }
-        location = Card.LOCATION_NULL;
+//        location = Card.LOCATION_NULL;
     }
 
     private void setupGesture() {
@@ -631,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         } else if(requestCode == 8000){
             if (resultCode == Activity.RESULT_OK) {
                 setupSize();
-                setupCards();
+                setupCards(-1);
             }
         } else if (requestCode >= 9000) {
             if (resultCode == Activity.RESULT_OK) {
@@ -641,8 +630,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 String path = "sdcard/ie_project/" + filename;
                 int photoLocation = requestCode - 9000;
                 Log.e("photoLocation", String.valueOf(photoLocation));
-                cards.add(new Card(size, photoLocation, "", path, -1, true));
-                setupCards();
+                cards.add(new Card(photoLocation, size, "", path, "/uploads/test.mp3", "", true));
+                setupCards(-1);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -695,7 +684,98 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         return false;
     }
 
+    private class requestLocationCards extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            final StringBuilder responseOutput = new StringBuilder();
+            try {
+//                final TextView outputView = (TextView) findViewById(output);
+
+//                URL url = new URL("https://192.168.65.99:8080/app/api/loc/B9407F30-F5F8-466E-AFF9-25556B57FE6D/1234/1234");
+//                URL url = new URL("https://192.168.65.99:8080/app/api/pic/count");
+                String tmp = "https://192.168.65.99:8080/app/api/";
+                for (String p: params) {
+                    tmp += p;
+                }
+                Log.e("tmp", tmp);
+//                URL url = new URL("https://192.168.65.99:8080/app/api/" + params[0]);
+                URL url = new URL(tmp);
+
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                String urlParameters = "";
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
+                connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
+                connection.setDoOutput(true);
+                DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
+                dStream.writeBytes(urlParameters);
+                dStream.flush();
+                dStream.close();
+                int responseCode = connection.getResponseCode();
+                final StringBuilder output = new StringBuilder("Request URL " + url);
+                output.append(System.getProperty("line.separator") + "Request Parameters " + urlParameters);
+                output.append(System.getProperty("line.separator") + "Response Code " + responseCode);
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    responseOutput.append(line);
+                }
+                br.close();
+
+                output.append(System.getProperty("line.separator") + "Response " + System.getProperty("line.separator") + System.getProperty("line.separator") + responseOutput.toString());
+//                response = String.valueOf(responseOutput);
+//                Log.d("xxxxx", String.valueOf(output));
+
+                MainActivity.this.runOnUiThread(new Runnable() {
+
+
+                    @Override
+                    public void run() {
+//                        outputView.setText(output);
+
+                    }
+                });
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return responseOutput.toString();
+        }
+
+        public void onPostExecute(String result) {
+            response = result;
+//            Log.e("Response", response);
+            try {
+                JSONObject jsonObj = new JSONObject(response);
+//                System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(new JsonParser().parse(response)));
+
+//                String loudScreaming = jsonObj.getJSONArray("Location");
+//                Log.e("-----JSON result", String.valueOf(josnArr));
+                JSONArray josnArr  = jsonObj.getJSONArray("Picture");
+                cards.clear();
+                for (int i = 0; i < josnArr.length(); i++) {
+                    JSONObject picture = josnArr.getJSONObject(i);
+                    int lid = picture.getInt("lid");
+                    int pid = picture.getInt("pid");
+                    String pname = picture.getString("pname");
+                    String imgurl = "https://192.168.65.99:8080" + picture.getString("imgurl");
+                    //                    Log.d("IMAGE URL", imgurl);
+                    String soundurl = picture.getString("soundurl");
+                    String description = picture.getString("description");
+                    cards.add(new Card(lid, pid, pname, imgurl, soundurl, description, false));
+                    location = lid;
+                }
+                setupCards(location);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
-//28/2/2017/
-//28/2/2017 kobe
-//28/2/2017/ fai
+

@@ -1,19 +1,13 @@
 package com.cuhk.ieproject.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.cuhk.ieproject.util.RequestWorker;
 
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by anson on 7/11/2016.
