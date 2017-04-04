@@ -11,7 +11,10 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -20,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -94,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
     int width;
     int cardHeight;
     int colNum = 4;
+    int doubleCK = 0;
+
+    private Session session;
+    private Button btnSetting;
+
+    private Setting mySetting;
 
     int time = 1000;
 
@@ -122,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     private static TextView toastText;
 
     int CAMERA_REQUEST;
+    private static final int SETTING_REQUEST = 8000;
 
     private static void makeTextAndShow(final Context context, final String text, final int duration) {
         if (toast == null) {
@@ -151,10 +162,16 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 //        test();
+        session = new Session(this);
+        mySetting = new Setting(this);
+        if(!session.loggedin()){
+            logout();
+        }
         setContentView(R.layout.activity_main);
-
+        setupSettingBtn();
         setupReferences();
         setupGesture();
+        mySetting.setCardSize(mySetting.getCardSize());
         setupSize();
         setupData();
         setupBeacon();
@@ -193,6 +210,67 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //        // Add the request to the RequestQueue.
 //        queue.add(stringRequest);
+
+
+
+
+//        btnSetting = (Button)findViewById(R.id.btnSetting);
+//        btnSetting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                doubleCK++;
+//
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if(doubleCK == 1){
+//                            Toast.makeText(MainActivity.this,"Single  Click",Toast.LENGTH_SHORT).show();
+//                        }else if(doubleCK == 2){
+//                            startActivity(new Intent(MainActivity.this, SettingActivity.class));
+//                        }
+//                        doubleCK = 0;
+//                    }
+//                },500);
+//
+//            }
+//        });
+    }
+
+    private void setupSettingBtn(){
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
+                        .setAction("Confirm", new View.OnClickListener(){
+                            @Override
+                            public void onClick(View view) {
+                                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                                startActivityForResult(settingIntent, SETTING_REQUEST);
+                            }
+                        }).show();
+            }
+        });
+    }
+
+
+    private void showSnackBar(View view) {
+        Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
+                .setAction("Confirm", new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivityForResult(settingIntent, SETTING_REQUEST);
+                    }
+                }).show();
+    }
+
+
+    private void logout(){
+        session.setLoggedin(false);
+        finish();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
 //    private void test() {
@@ -213,6 +291,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupReferences() {
         cardGV = (GridView) findViewById(R.id.card_list);
+        //cardGV.setBackgroundColor(Color.YELLOW);
+        cardGV.setVerticalSpacing(20);
+        cardGV.setHorizontalSpacing(20);
     }
 
     private void setupData() {
@@ -284,11 +365,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSize() {
-        cardGV.setNumColumns(colNum);
-
+//        cardGV.setNumColumns(colNum);
+        cardGV.setNumColumns(mySetting.getCardSize());
         Display display = getWindowManager().getDefaultDisplay();
         height = display.getHeight();
-        cardHeight = height * 3 / 2 / colNum;
+//        cardHeight = height * 3 / 2 / colNum;
+        cardHeight = height * 3 / 2 / mySetting.getCardSize();
 
 
         param = new AbsListView.LayoutParams(
@@ -301,7 +383,10 @@ public class MainActivity extends AppCompatActivity {
         if (tempLocation != location) {
             currentCards.clear();
 
-            currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+            if(mySetting.camera()){
+                currentCards.add(new Card(-1, location, "相機", "camera_icon", -1, false));
+            }
+
             Log.e("cardSize", String.valueOf(cards.size()));
 
             for (int i = 0; i < cards.size(); i++) {
@@ -338,29 +423,29 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
-                Log.e("Test", "LEFT");
-                if (fingers >= 2) {
-                    if (colNum >= 2) {
-                        colNum = colNum - 1;
-                        setupSize();
-                        setupCards();
-                    }
-
-                }
+//                Log.e("Test", "LEFT");
+//                if (fingers >= 2) {
+//                    if (colNum >= 2) {
+//                        colNum = colNum - 1;
+//                        setupSize();
+//                        setupCards();
+//                    }
+//
+//                }
                 return false;
             }
 
             @Override
             public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
-                Log.e("Test", "RIGHT");
-                if (fingers >= 2) {
-                    if (colNum <= 8) {
-                        colNum = colNum + 1;
-                        setupSize();
-                        setupCards();
-                    }
-
-                }
+//                Log.e("Test", "RIGHT");
+//                if (fingers >= 2) {
+//                    if (colNum <= 8) {
+//                        colNum = colNum + 1;
+//                        setupSize();
+//                        setupCards();
+//                    }
+//
+//                }
                 return false;
             }
 
@@ -419,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
         cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
+                if (mySetting.camera() && position == 0) {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File file = getFile();
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
@@ -455,6 +540,7 @@ public class MainActivity extends AppCompatActivity {
             View itemView = convertView;
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
+                //itemView.setBackgroundColor(Color.YELLOW);
             }
 
             Card currentCard = currentCards.get(position);
@@ -518,6 +604,11 @@ public class MainActivity extends AppCompatActivity {
                 connectToService();
             } else {
                 Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_LONG).show();
+            }
+        } else if(requestCode == 8000){
+            if (resultCode == Activity.RESULT_OK) {
+                setupSize();
+                setupCards();
             }
         } else if (requestCode >= 9000) {
             if (resultCode == Activity.RESULT_OK) {
