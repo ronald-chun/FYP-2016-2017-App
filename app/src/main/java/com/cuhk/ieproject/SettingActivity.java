@@ -60,7 +60,7 @@ public class SettingActivity extends AppCompatActivity {
         cardSizeVal = (TextView)findViewById(R.id.card_size_value);
         cardSizeSeekbar = (SeekBar)findViewById(R.id.card_size_seekbar);
         cardSizeSeekbar.setMax(9);
-        cardSizeSeekbar.setProgress(4);
+        cardSizeSeekbar.setProgress(mySetting.getCardSize());
         cardSizeVal.setText(cardSizeSeekbar.getProgress()+"/"+cardSizeSeekbar.getMax());
 
     }

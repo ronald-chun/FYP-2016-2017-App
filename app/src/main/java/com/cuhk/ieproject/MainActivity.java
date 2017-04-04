@@ -158,28 +158,16 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 //        test();
-        mySetting = new Setting(this);
         session = new Session(this);
+        mySetting = new Setting(this);
         if(!session.loggedin()){
             logout();
         }
         setContentView(R.layout.activity_main);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
-                        .setAction("Confirm", new View.OnClickListener(){
-                            @Override
-                            public void onClick(View view) {
-                                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
-                                startActivityForResult(settingIntent, SETTING_REQUEST);
-                            }
-                        }).show();
-            }
-        });
+        setupSettingBtn();
         setupReferences();
         setupGesture();
+        mySetting.setCardSize(4);
         setupSize();
         setupData();
         setupBeacon();
@@ -243,6 +231,35 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
+    }
+
+    private void setupSettingBtn(){
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
+                        .setAction("Confirm", new View.OnClickListener(){
+                            @Override
+                            public void onClick(View view) {
+                                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                                startActivityForResult(settingIntent, SETTING_REQUEST);
+                            }
+                        }).show();
+            }
+        });
+    }
+
+
+    private void showSnackBar(View view) {
+        Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
+                .setAction("Confirm", new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivityForResult(settingIntent, SETTING_REQUEST);
+                    }
+                }).show();
     }
 
 

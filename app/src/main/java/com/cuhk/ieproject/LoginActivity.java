@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         check = new Check(this);
         session =new Session(this);
-
+        mySetting = new Setting(this);
         login = (Button)findViewById(R.id.btnLogin);
         login.setOnClickListener(this);
         etID = (EditText)findViewById(R.id.etID);
