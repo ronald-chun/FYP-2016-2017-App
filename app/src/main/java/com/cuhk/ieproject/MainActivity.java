@@ -14,6 +14,7 @@ import android.net.SSLSessionCache;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
@@ -67,6 +68,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.UUID;
@@ -80,7 +82,7 @@ import javax.net.ssl.X509TrustManager;
 import in.championswimmer.sfg.lib.SimpleFingerGestures;
 import info.guardianproject.netcipher.NetCipher;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     private static final String TAG = "MainActivity";
 
@@ -101,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
     int cardHeight;
     int colNum = 4;
     int doubleCK = 0;
+
+    TextToSpeech textToSpeech;
 
     private Session session;
     private Button btnSetting;
@@ -163,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        textToSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
 //        test();
         session = new Session(this);
         mySetting = new Setting(this);
@@ -243,15 +249,27 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
-                        .setAction("Confirm", new View.OnClickListener(){
-                            @Override
-                            public void onClick(View view) {
-                                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
-                                startActivityForResult(settingIntent, SETTING_REQUEST);
-                            }
-                        }).show();
+            public void onClick(final View setView) {
+                doubleCK++;
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(doubleCK == 2){
+                            Snackbar.make(setView, "Go to setting page?", Snackbar.LENGTH_LONG)
+                                    .setAction("Confirm", new View.OnClickListener(){
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                                            startActivityForResult(settingIntent, SETTING_REQUEST);
+                                        }
+                                    }).show();
+
+                        }
+                        doubleCK = 0;
+
+                    }
+                },500);
             }
         });
     }
@@ -367,6 +385,12 @@ public class MainActivity extends AppCompatActivity {
                 cardHeight);
 
     }
+
+    @Override
+    public void onInit(int i) {
+
+    }
+
 
     private class CardListAdapter extends ArrayAdapter<Card> {
         int location;
@@ -545,6 +569,12 @@ public class MainActivity extends AppCompatActivity {
                         Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         vibe.vibrate(100);
                         makeTextAndShow(getApplicationContext(), "你選擇的是 " + currentCards.get(position).getName(), Toast.LENGTH_SHORT);
+                        if(!textToSpeech.isSpeaking()){
+                            HashMap<String,String> stringStringHashMap = new HashMap<String,String>();
+                            textToSpeech.speak(currentCards.get(position).getName(), TextToSpeech.QUEUE_ADD, stringStringHashMap);
+                        }else{
+                            textToSpeech.stop();
+                        }
                     }
                 }
             }
@@ -554,6 +584,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         beaconManager.disconnect();
+        if(textToSpeech!=null){
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+            textToSpeech=null;
+        }
         super.onDestroy();
     }
 

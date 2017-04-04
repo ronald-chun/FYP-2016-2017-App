@@ -3,6 +3,7 @@ package com.cuhk.ieproject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,7 @@ public class SettingActivity extends AppCompatActivity {
     Session session;
     TextView user_name;
     String username;
-    Button btnLogout;
+    Button btnLogout, okButton;
     Switch cameraSwitch;
     TextView cardSizeVal;
     SeekBar cardSizeSeekbar;
@@ -51,6 +52,7 @@ public class SettingActivity extends AppCompatActivity {
         user_name = (TextView)findViewById(R.id.user_name_val);
         user_name.setText(mySetting.getUsername());
         btnLogout = (Button)findViewById(R.id.btnLogout);
+        okButton = (Button)findViewById(R.id.okButton);
         cameraSwitch = (Switch)findViewById(R.id.cameraSwitch);
         if(mySetting.camera()){
             cameraSwitch.setChecked(true);
@@ -70,6 +72,14 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 logout();
+            }
+        });
+
+        okButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                finish();
             }
         });
 

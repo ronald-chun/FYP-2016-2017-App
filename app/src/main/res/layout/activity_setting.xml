@@ -11,16 +11,18 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login as: "
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"/>
+        android:text="Login as: "
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/user_name_val"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_toRightOf="@+id/user_name"
-        android:layout_marginTop="50dp" />
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -29,32 +31,36 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="102dp"
-        android:text="Logout" />
+        android:text="Logout"
+        android:textSize="18sp" />
 
     <Switch
         android:id="@+id/cameraSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="38dp"
         android:layout_below="@+id/btnLogout"
         android:layout_centerHorizontal="true"
-        android:text="Enable Camera" />
+        android:layout_marginTop="38dp"
+        android:text="Enable Camera"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/card_size_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Card size: "
-        android:layout_marginTop="38dp"
         android:layout_below="@+id/cameraSwitch"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:text="Card size: "
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/card_size_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/card_size_name"
         android:layout_marginTop="38dp"
-        android:layout_below="@+id/cameraSwitch"/>
+        android:layout_below="@+id/cameraSwitch"
+        android:textSize="18sp"/>
 
 
     <SeekBar
@@ -65,6 +71,16 @@
         android:layout_below="@+id/card_size_value"
         android:layout_alignStart="@+id/cameraSwitch"
         android:layout_alignEnd="@+id/cameraSwitch" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_size_seekbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="OK"
+        android:textSize="18sp" />
 
 
 </RelativeLayout>

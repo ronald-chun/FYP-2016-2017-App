@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private Button login;
-    private EditText etID, etPassword;
+    private EditText etID;
     private Check check;
     private Session session;
     private Setting mySetting;
@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = (Button)findViewById(R.id.btnLogin);
         login.setOnClickListener(this);
         etID = (EditText)findViewById(R.id.etID);
-        etPassword = (EditText)findViewById(R.id.etPassword);
 
         if(session.loggedin()){
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -50,8 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login(){
         String id = etID.getText().toString();
-        String password = etPassword.getText().toString();
-        if (check.verifyUser(id, password)){
+        if (check.verifyUser(id)){
             session.setLoggedin(true);
             mySetting.setUsername(id);
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
