@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         setupSettingBtn();
         setupReferences();
         setupGesture();
-        mySetting.setCardSize(4);
+        mySetting.setCardSize(mySetting.getCardSize());
         setupSize();
         setupData();
         setupBeacon();
@@ -287,6 +287,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupReferences() {
         cardGV = (GridView) findViewById(R.id.card_list);
+        //cardGV.setBackgroundColor(Color.YELLOW);
+        cardGV.setVerticalSpacing(20);
+        cardGV.setHorizontalSpacing(20);
     }
 
     private void setupData() {
@@ -491,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
         cardGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
+                if (mySetting.camera() && position == 0) {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File file = getFile();
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
@@ -527,6 +530,7 @@ public class MainActivity extends AppCompatActivity {
             View itemView = convertView;
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
+                //itemView.setBackgroundColor(Color.YELLOW);
             }
 
             Card currentCard = currentCards.get(position);
