@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
     BeaconManager beaconManager;
     String nearestMacAddress;
+    String nearestMajor;
+    String nearestMinor;
+    String nearestMeasuredPower;
+    String nearestRssi;
 
     GridView cardGV;
 
@@ -313,9 +317,15 @@ public class MainActivity extends AppCompatActivity {
                                     nearestBeacon = rangedBeacon;
                             }
                             nearestMacAddress = String.valueOf(nearestBeacon.getMacAddress());
+                            nearestMajor = String.valueOf(nearestBeacon.getMajor());
+                            nearestMinor = String.valueOf(nearestBeacon.getMinor());
+                            nearestMeasuredPower = String.valueOf(nearestBeacon.getMeasuredPower());
+                            nearestRssi = String.valueOf(nearestBeacon.getRssi());
+
+
                         }
 
-                        Log.e(TAG, " " + nearestMacAddress);
+                        Log.e(TAG, " " + nearestMacAddress + " " + nearestMajor + ":" + nearestMinor + " " + nearestMeasuredPower + " " + nearestRssi);
 
                         if (nearestMacAddress != null) {
                             for (int position = 0; position < beaconSize; position++) {

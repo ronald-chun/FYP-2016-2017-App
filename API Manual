@@ -1,6 +1,6 @@
 // ---- Login ----
 var http = new XMLHttpRequest();
-var url = "https://192.168.65.80:8080/admin/api/login";
+var url = "https://192.168.65.99:8080/admin/api/login";
 var params = "username=admin&password=admin";
 http.open("POST", url, true);
 
@@ -17,11 +17,15 @@ http.onreadystatechange = function() {//Call a function when the state changes.
 http.send(params);
 
 
+
+
 // ---- Add User -----
 var http = new XMLHttpRequest();
-var url = "https://192.168.56.101:8080/admin/api/user/add";
+var url = "https://192.168.65.99:8080/admin/api/user/add";
 var params = "pref=1&uname=Student_1";
 http.open("POST", url, true);
+
+
 
 //Send the proper header information along with the request
 http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -40,3 +44,25 @@ http.send(params);
 // Access image: https://192.168.65.80:8080/uploads/Hydrangeas.jpg
 // Access sound: https://192.168.65.80:8080/uploads/Kalimba.mp3
 // Test response: https://192.168.65.80:8080/admin/api/pic/edit
+
+
+// ---- API List
+app.post('/user/add'
+app.post('/pic/location/add'
+app.post('/pic/personal/add'
+app.post('/pic/edit'
+app.post('/pic/edit/update'
+app.post('/location/add'
+app.post('/pic/count'
+app.post('/pic/remove'
+app.post('/loc/remove'
+app.post('/user/remove'
+app.post('/pic/remove'
+app.post('/pic/:pid'
+app.post('/user/edit/update'
+app.post('/user/edit'
+app.post('/user/:uid'
+app.get('/stat/:uid/:pid/:lid'
+
+
+// URL expected: http://hostname/admin/api/cat/add
