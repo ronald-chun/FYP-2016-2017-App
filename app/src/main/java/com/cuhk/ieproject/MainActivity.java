@@ -8,12 +8,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
 import android.net.SSLCertificateSocketFactory;
 import android.net.SSLSessionCache;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
+import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -250,19 +252,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private void showSnackBar(View view) {
-        Snackbar.make(view, "Go to setting page?", Snackbar.LENGTH_LONG)
-                .setAction("Confirm", new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                        Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
-                        startActivityForResult(settingIntent, SETTING_REQUEST);
-                    }
-                }).show();
-    }
-
-
     private void logout(){
         session.setLoggedin(false);
         finish();
@@ -367,6 +356,43 @@ public class MainActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 cardHeight);
 
+    }
+
+    private class CardListAdapter extends ArrayAdapter<Card> {
+        int location;
+
+
+        public CardListAdapter(int location) {
+            super(MainActivity.this, R.layout.card_item, currentCards);
+            this.location = location;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
+                //itemView.setBackgroundColor(Color.YELLOW);
+            }
+
+            Card currentCard = currentCards.get(position);
+            itemView.setLayoutParams(param);
+
+            Log.e("isPhoto()", String.valueOf(currentCard.isPhoto()));
+
+            if (currentCard.isPhoto()) {
+                Bitmap bitmap = decodeSampledBitmapFromFile(currentCard.getImagePath(), 1000, 700);
+                ((ImageView) itemView.findViewById(R.id.card_image)).setImageBitmap(bitmap);
+            } else if ((currentCard.getImagePath().substring(0, 4)).equals("http")) {
+                ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+                imageLoader.displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image)));
+            } else {
+                int resId = getResources().getIdentifier(currentCard.getImagePath(), "drawable", getPackageName());
+                ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(resId);
+            }
+
+            return itemView;
+        }
     }
 
     private void setupCards() {
@@ -515,44 +541,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private class CardListAdapter extends ArrayAdapter<Card> {
-        int location;
-
-
-        public CardListAdapter(int location) {
-            super(MainActivity.this, R.layout.card_item, currentCards);
-            this.location = location;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View itemView = convertView;
-            if (itemView == null) {
-                itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
-                //itemView.setBackgroundColor(Color.YELLOW);
-            }
-
-            Card currentCard = currentCards.get(position);
-            itemView.setLayoutParams(param);
-
-            Log.e("isPhoto()", String.valueOf(currentCard.isPhoto()));
-
-            if (currentCard.isPhoto()) {
-                Bitmap bitmap = decodeSampledBitmapFromFile(currentCard.getImagePath(), 1000, 700);
-                ((ImageView) itemView.findViewById(R.id.card_image)).setImageBitmap(bitmap);
-            } else if ((currentCard.getImagePath().substring(0, 4)).equals("http")) {
-                ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
-                imageLoader.displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image)));
-            } else {
-                int resId = getResources().getIdentifier(currentCard.getImagePath(), "drawable", getPackageName());
-                ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(resId);
-            }
-
-            return itemView;
-        }
-    }
-
     @Override
     protected void onDestroy() {
         beaconManager.disconnect();
@@ -628,6 +616,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void connectToInternet() {
+        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);;
+        wifi.setWifiEnabled(true);
+    }
+
+    private boolean checkInternetConenction() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connec
+                =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+
+        // Check for network connections
+        if ( connec.getNetworkInfo(0).getState() ==
+                android.net.NetworkInfo.State.CONNECTED ||
+                connec.getNetworkInfo(0).getState() ==
+                        android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() ==
+                        android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
+            //Toast.makeText(this, " WIFI Connected ", Toast.LENGTH_LONG).show();
+            return true;
+        }else if (
+                connec.getNetworkInfo(0).getState() ==
+                        android.net.NetworkInfo.State.DISCONNECTED ||
+                        connec.getNetworkInfo(1).getState() ==
+                                android.net.NetworkInfo.State.DISCONNECTED  ) {
+            Toast.makeText(this, " Connecting WIFI ", Toast.LENGTH_LONG).show();
+            connectToInternet();
+            return false;
+        }
+        return false;
     }
 
 }
