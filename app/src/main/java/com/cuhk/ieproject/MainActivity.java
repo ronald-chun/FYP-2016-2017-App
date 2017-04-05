@@ -22,6 +22,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -385,18 +386,28 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         int location;
 
 
+
         public CardListAdapter(int location) {
             super(MainActivity.this, R.layout.card_item, currentCards);
             this.location = location;
         }
+        public class ViewHolder{
+            ImageView IV;
+        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
             View itemView = convertView;
-//            if (itemView == null) {
+             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
+                 holder = new ViewHolder();
+                 holder.IV = (ImageView)itemView.findViewById(R.id.card_image);
+                 itemView.setTag(holder);
                 //itemView.setBackgroundColor(Color.YELLOW);
-//            }
+             }else{
+                 holder = (ViewHolder)itemView.getTag();
+             }
 
             Card currentCard = currentCards.get(position);
             itemView.setLayoutParams(param);
