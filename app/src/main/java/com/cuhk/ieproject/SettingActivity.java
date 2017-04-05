@@ -123,6 +123,17 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        contextSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    mySetting.setEnableControl(true);
+                } else {
+                    mySetting.setEnableControl(false);
+                }
+            }
+        });
+
         cardSizeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
