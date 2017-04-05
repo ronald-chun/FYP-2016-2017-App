@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                         }
 
                         requestLocationCards postLoc = (requestLocationCards) new requestLocationCards();
-                        postLoc.execute(api_loc, nearestMajor, "/", nearestMinor);
+                        postLoc.execute(api_loc, nearestMajor);
 
                         Log.e(TAG, " " + nearestMacAddress + " " + nearestMajor + ":" + nearestMinor + " " + nearestMeasuredPower + " " + nearestRssi);
 
@@ -756,7 +756,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
 //                String loudScreaming = jsonObj.getJSONArray("Location");
 //                Log.e("-----JSON result", String.valueOf(josnArr));
-                JSONArray josnArr  = jsonObj.getJSONArray("Picture");
+//                JSONArray josnArr  = jsonObj.getJSONArray("Picture");
+                JSONArray josnArr  = jsonObj.getJSONArray("Location");
                 cards.clear();
                 for (int i = 0; i < josnArr.length(); i++) {
                     JSONObject picture = josnArr.getJSONObject(i);
