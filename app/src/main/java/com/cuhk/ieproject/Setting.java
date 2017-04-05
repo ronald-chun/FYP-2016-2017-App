@@ -86,18 +86,8 @@ public class Setting {
         editor.commit();
     }
 
-
-    public void setEnableControl(boolean enableControl){
-        editor.putBoolean("enableControlMode", enableControl);
-        editor.commit();
-    }
-
     public boolean camera() {
         return settings.getBoolean("enableCameraMode", false);
-    }
-
-    public boolean contextControl(){
-        return settings.getBoolean("enableControlMode", false);
     }
 
     public void setCardSize(int cardSize){

@@ -79,6 +79,11 @@ public class SettingActivity extends AppCompatActivity {
         }else{
             cameraSwitch.setChecked(false);
         }
+        if(mySetting.context()){
+            contextSwitch.setChecked(true);
+        }else{
+            contextSwitch.setChecked(false);
+        }
         cardSizeVal = (TextView)findViewById(R.id.card_size_value);
         cardSizeSeekbar = (SeekBar)findViewById(R.id.card_size_seekbar);
         cardSizeSeekbar.setMax(9);
@@ -127,9 +132,9 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    mySetting.setEnableControl(true);
+                    mySetting.setEnableContext(true);
                 } else {
-                    mySetting.setEnableControl(false);
+                    mySetting.setEnableContext(false);
                 }
             }
         });
@@ -158,16 +163,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        contextSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked){
-//                if(isChecked){
-//
-//                } else {
-//
-//                }
-            }
-        });
     }
 
     private void logout(){
