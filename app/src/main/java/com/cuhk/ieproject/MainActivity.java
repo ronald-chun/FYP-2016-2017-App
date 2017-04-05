@@ -22,7 +22,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -42,8 +41,15 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     String api_loc = "loc/B9407F30-F5F8-466E-AFF9-25556B57FE6D/";
 
     GridView cardGV;
-
+    Context context = MainActivity.this;
     int height;
     int width;
     int cardHeight;
@@ -155,6 +161,32 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         super.onCreate(savedInstanceState);
 
+        File cacheDir = StorageUtils.getCacheDirectory(context);
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
+                .diskCacheExtraOptions(480, 800, null)
+                .threadPoolSize(3) // default
+                .threadPriority(Thread.NORM_PRIORITY - 2) // default
+                .tasksProcessingOrder(QueueProcessingType.FIFO) // default
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .memoryCacheSize(2 * 1024 * 1024)
+                .memoryCacheSizePercentage(13) // default
+                .diskCache(new UnlimitedDiskCache(cacheDir)) // default
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(1000)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
+                .imageDownloader(new BaseImageDownloader(context)) // default
+                .defaultDisplayImageOptions(options) // default
+                .writeDebugLogs()
+                .build();
+        ImageLoader.getInstance().init(config);
+
         textToSpeech = new TextToSpeech(MainActivity.this, MainActivity.this);
 //        test();
         session = new Session(this);
@@ -173,8 +205,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         HttpsTrustManager.allowAllSSL();
 
         // Create global configuration and initialize ImageLoader with this config
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
-        ImageLoader.getInstance().init(config);
+//        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+//        ImageLoader.getInstance().init(config);
 //        String url = "https://192.168.65.80:8080/uploads/Desert.jpg";
 
 //        imageView = (ImageView) findViewById(R.id.imageView);
@@ -395,31 +427,34 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             ImageView IV;
         }
 
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             View itemView = convertView;
-             if (itemView == null) {
+//             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
                  holder = new ViewHolder();
                  holder.IV = (ImageView)itemView.findViewById(R.id.card_image);
                  itemView.setTag(holder);
                 //itemView.setBackgroundColor(Color.YELLOW);
-             }else{
+//             }else{
                  holder = (ViewHolder)itemView.getTag();
-             }
+//             }
 
             Card currentCard = currentCards.get(position);
             itemView.setLayoutParams(param);
 
             Log.e("isPhoto()", String.valueOf(currentCard.isPhoto()));
 
+//            ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+
             if (currentCard.isPhoto()) {
                 Bitmap bitmap = decodeSampledBitmapFromFile(currentCard.getImagePath(), 1000, 700);
                 ((ImageView) itemView.findViewById(R.id.card_image)).setImageBitmap(bitmap);
             } else if ((currentCard.getImagePath().substring(0, 4)).equals("http")) {
-                ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
-                imageLoader.displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image)));
+                ImageLoader.getInstance().displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image))); // Incoming options will be used
+//                imageLoader.displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image)));
             } else {
                 int resId = getResources().getIdentifier(currentCard.getImagePath(), "drawable", getPackageName());
                 ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(resId);
@@ -427,6 +462,46 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
             return itemView;
         }
+
+//        @Override public View getView(int position, View convertView, ViewGroup parent) {
+//            ViewHolder holder;
+//            View itemView = convertView;
+//             if (itemView == null) {
+//                itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
+//                 holder = new ViewHolder();
+//                 holder.IV = (ImageView)itemView.findViewById(R.id.card_image);
+//                 itemView.setTag(holder);
+//                //itemView.setBackgroundColor(Color.YELLOW);
+//             }else{
+//                 holder = (ViewHolder)itemView.getTag();
+//             }
+//
+//            Card currentCard = currentCards.get(position);
+//            itemView.setLayoutParams(param);
+//
+//            Log.e("isPhoto()", String.valueOf(currentCard.isPhoto()));
+//
+//            if (currentCard.isPhoto()) {
+////                Bitmap bitmap = decodeSampledBitmapFromFile(currentCard.getImagePath(), 1000, 700);
+////                ((ImageView) itemView.findViewById(R.id.card_image)).setImageBitmap(bitmap);
+//
+//                Picasso.with(MainActivity.this).load(currentCard.getImagePath()).into(((ImageView) itemView.findViewById(R.id.card_image)));
+//
+//            } else if ((currentCard.getImagePath().substring(0, 4)).equals("http")) {
+////                ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
+////                imageLoader.displayImage(currentCard.getImagePath(), ((ImageView) itemView.findViewById(R.id.card_image)));
+//                Log.e("path", currentCard.getImagePath());
+//                Picasso.with(MainActivity.this).load(currentCard.getImagePath()).into(((ImageView) itemView.findViewById(R.id.card_image)));
+//
+//            } else {
+//                int resId = getResources().getIdentifier(currentCard.getImagePath(), "drawable", getPackageName());
+////                ((ImageView) itemView.findViewById(R.id.card_image)).setImageResource(resId);
+//
+//                Picasso.with(MainActivity.this).load(resId).into(((ImageView) itemView.findViewById(R.id.card_image)));
+//            }
+//
+//            return itemView;
+//        }
     }
 
     private void setupCards(int location) {
