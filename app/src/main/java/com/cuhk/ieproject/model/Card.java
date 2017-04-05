@@ -82,6 +82,49 @@ public class Card {
 //        cards.add(new Card(16, LOCATION_CLASSROOM, "圖書館", "library", -1, false));
 //        cards.add(new Card(17, LOCATION_CLASSROOM, "書", "book", -1, false));
 //        cards.add(new Card(18, LOCATION_CLASSROOM, "Test", "https://192.168.65.99:8080/uploads/Desert.jpg", -1, false));
+        cards.add(new Card(7, 1, "廁所", "https://192.168.65.99:8080/uploads/01廁所.jpg", "/uploads/test.mp3", "廁所", false));
+        cards.add(new Card(7, 2, "水", "https://192.168.65.99:8080/uploads/02水.jpg", "/uploads/test.mp3", "水", false));
+        cards.add(new Card(7, 3, "飯", "https://192.168.65.99:8080/uploads/03飯.jpg", "/uploads/test.mp3", "飯", false));
+        cards.add(new Card(7, 4, "蘋果", "https://192.168.65.99:8080/uploads/04蘋果.jpg", "/uploads/test.mp3", "蘋果", false));
+        cards.add(new Card(7, 5, "梨", "https://192.168.65.99:8080/uploads/05梨.jpg", "/uploads/test.mp3", "梨", false));
+        cards.add(new Card(7, 6, "肉", "https://192.168.65.99:8080/uploads/06肉.jpg", "/uploads/test.mp3", "肉", false));
+        cards.add(new Card(7, 7, "粉麵", "https://192.168.65.99:8080/uploads/07粉麵.jpg", "/uploads/test.mp3", "粉麵", false));
+        cards.add(new Card(7, 8, "雞翼", "https://192.168.65.99:8080/uploads/08雞翼.jpg", "/uploads/test.mp3", "雞翼", false));
+        cards.add(new Card(7, 9, "麵包-1", "https://192.168.65.99:8080/uploads/09麵包-1.jpg", "/uploads/test.mp3", "麵包", false));
+        cards.add(new Card(7, 10, "蛋糕", "https://192.168.65.99:8080/uploads/10蛋糕.jpg", "/uploads/test.mp3", "蛋糕", false));
+        cards.add(new Card(7, 11, "旺旺仙貝", "https://192.168.65.99:8080/uploads/11旺旺仙貝.jpg", "/uploads/test.mp3", "旺旺仙貝", false));
+        cards.add(new Card(7, 12, "益力多", "https://192.168.65.99:8080/uploads/12益力多.jpg", "/uploads/test.mp3", "益力多", false));
+        cards.add(new Card(7, 13, "果汁", "https://192.168.65.99:8080/uploads/13果汁.jpg", "/uploads/test.mp3", "果汁", false));
+        cards.add(new Card(7, 14, "百力滋", "https://192.168.65.99:8080/uploads/14百力滋.jpg", "/uploads/test.mp3", "百力滋", false));
+        cards.add(new Card(7, 15, "蝦條", "https://192.168.65.99:8080/uploads/15蝦條.jpg", "/uploads/test.mp3", "蝦條", false));
+        cards.add(new Card(7, 16, "餅乾", "https://192.168.65.99:8080/uploads/16餅乾.jpg", "/uploads/test.mp3", "餅乾", false));
+        cards.add(new Card(7, 17, "匙羹", "https://192.168.65.99:8080/uploads/17匙羹.jpg", "/uploads/test.mp3", "匙羹", false));
+        cards.add(new Card(7, 18, "杯", "https://192.168.65.99:8080/uploads/18杯.jpg", "/uploads/test.mp3", "杯", false));
+        cards.add(new Card(7, 19, "食飯", "https://192.168.65.99:8080/uploads/19食飯.jpg", "/uploads/test.mp3", "食飯", false));
+        cards.add(new Card(7, 20, "睇書", "https://192.168.65.99:8080/uploads/20睇書.jpg", "/uploads/test.mp3", "睇書", false));
+
+        cards.add(new Card(8, 35, "熱", "https://192.168.65.99:8080/uploads/35熱.jpg", "/uploads/test.mp3", "熱", false));
+        cards.add(new Card(8, 36, "廁所", "https://192.168.65.99:8080/uploads/01廁所.jpg", "/uploads/test.mp3", "廁所", false));
+        cards.add(new Card(8, 37, "水", "https://192.168.65.99:8080/uploads/02水.jpg", "/uploads/test.mp3", "水", false));
+        cards.add(new Card(8, 38, "睇書", "https://192.168.65.99:8080/uploads/03睇書.jpg", "/uploads/test.mp3", "睇書", false));
+        cards.add(new Card(8, 39, "餅乾", "https://192.168.65.99:8080/uploads/03餅乾.jpg", "/uploads/test.mp3", "餅乾", false));
+        cards.add(new Card(8, 40, "聽歌", "https://192.168.65.99:8080/uploads/04聽歌.jpg", "/uploads/test.mp3", "聽歌", false));
+        cards.add(new Card(8, 41, "玩ipad", "https://192.168.65.99:8080/uploads/05玩ipad.jpg", "/uploads/test.mp3", "玩ipad", false));
+        cards.add(new Card(8, 42, "畫畫", "https://192.168.65.99:8080/uploads/06畫畫.jpg", "/uploads/test.mp3", "畫畫", false));
+        cards.add(new Card(8, 43, "刷牙", "https://192.168.65.99:8080/uploads/07刷牙.jpg", "/uploads/test.mp3", "刷牙", false));
+        cards.add(new Card(8, 44, "抹面", "https://192.168.65.99:8080/uploads/08抹面.jpg", "/uploads/test.mp3", "抹面", false));
+        cards.add(new Card(8, 45, "梳頭", "https://192.168.65.99:8080/uploads/09梳頭.jpg", "/uploads/test.mp3", "梳頭", false));
+        cards.add(new Card(8, 46, "食飯", "https://192.168.65.99:8080/uploads/10食飯.jpg", "/uploads/test.mp3", "食飯", false));
+        cards.add(new Card(8, 47, "玩", "https://192.168.65.99:8080/uploads/11玩.jpg", "/uploads/test.mp3", "玩", false));
+        cards.add(new Card(8, 48, "-波-1", "https://192.168.65.99:8080/uploads/12-波-1.jpg", "/uploads/test.mp3", "波", false));
+        cards.add(new Card(8, 49, "玩具車", "https://192.168.65.99:8080/uploads/13玩具車.jpg", "/uploads/test.mp3", "玩具車", false));
+        cards.add(new Card(8, 50, "砌圖", "https://192.168.65.99:8080/uploads/14砌圖.jpg", "/uploads/test.mp3", "砌圖", false));
+        cards.add(new Card(8, 51, "泡泡水", "https://192.168.65.99:8080/uploads/15泡泡水.jpg", "/uploads/test.mp3", "泡泡水", false));
+        cards.add(new Card(8, 52, "琴", "https://192.168.65.99:8080/uploads/16琴.jpg", "/uploads/test.mp3", "琴", false));
+        cards.add(new Card(8, 53, "積木", "https://192.168.65.99:8080/uploads/17積木.jpg", "/uploads/test.mp3", "積木", false));
+        cards.add(new Card(8, 54, "鼓", "https://192.168.65.99:8080/uploads/18鼓.jpg", "/uploads/test.mp3", "鼓", false));
+
+
 
         return  cards;
     }
