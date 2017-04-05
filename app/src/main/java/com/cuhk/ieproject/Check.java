@@ -7,7 +7,7 @@ import android.content.Context;
  */
 
 public class Check {
-    public static final String trueID = "abc";
+    public static final String trueID = "8";
 
     public Check(Context context){
 

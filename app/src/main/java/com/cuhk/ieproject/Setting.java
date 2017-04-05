@@ -45,6 +45,15 @@ public class Setting {
     public int getCardSize(){
         return settings.getInt("cardSize", 4);
     }
+
+    public void setEnableContext(boolean enableContext){
+        editor.putBoolean("enableContext", enableContext);
+        editor.commit();
+    }
+
+    public boolean context() {
+        return settings.getBoolean("enableContext", false);
+    }
 }
 
 
