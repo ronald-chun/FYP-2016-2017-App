@@ -560,9 +560,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     File file = getFile();
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                     CAMERA_REQUEST = 9000 + tempLocation;
+                    requestCardClick cardClick = (requestCardClick) new requestCardClick();
+                    cardClick.execute("stat/", String.valueOf(mySetting.getUID()), "/", String.valueOf(currentCards.get(position).getId()), "/", String.valueOf(location));
                     startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 } else {
                     if (currentCards.get(position).isPhoto()) {
+                        //TODO log photo card click to server
+                        //...
                         Intent intent = new Intent(MainActivity.this, ShowPhotoActivity.class);
                         intent.putExtra("path", currentCards.get(position).getImagePath());
                         startActivity(intent);
@@ -576,6 +580,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                         }else{
                             textToSpeech.stop();
                         }
+
+                        requestCardClick cardClick = (requestCardClick) new requestCardClick();
+                        cardClick.execute("stat/", String.valueOf(mySetting.getUID()), "/", String.valueOf(currentCards.get(position).getId()), "/", String.valueOf(location));
                     }
                 }
             }
@@ -789,6 +796,82 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 e.printStackTrace();
             }
         }
+    }
+
+    private class requestCardClick extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            final StringBuilder responseOutput = new StringBuilder();
+            try {
+                String tmp = "https://192.168.65.99:8080/app/api/";
+                for (String p: params) {
+                    tmp += p;
+                }
+                Log.e("tmp", tmp);
+//                URL url = new URL("https://192.168.65.99:8080/app/api/" + params[0]);
+                URL url = new URL(tmp);
+
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                String urlParameters = "";
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
+                connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
+                connection.setDoOutput(true);
+                DataOutputStream dStream = new DataOutputStream(connection.getOutputStream());
+                dStream.writeBytes(urlParameters);
+                dStream.flush();
+                dStream.close();
+                int responseCode = connection.getResponseCode();
+                final StringBuilder output = new StringBuilder("Request URL " + url);
+                output.append(System.getProperty("line.separator") + "Request Parameters " + urlParameters);
+                output.append(System.getProperty("line.separator") + "Response Code " + responseCode);
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    responseOutput.append(line);
+                }
+                br.close();
+
+                output.append(System.getProperty("line.separator") + "Response " + System.getProperty("line.separator") + System.getProperty("line.separator") + responseOutput.toString());
+//                response = String.valueOf(responseOutput);
+//                Log.d("xxxxx", String.valueOf(output));
+
+//                MainActivity.this.runOnUiThread(new Runnable() {
+//
+//
+//                    @Override
+//                    public void run() {
+////                        outputView.setText(output);
+//
+//                    }
+//                });
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return responseOutput.toString();
+        }
+
+        public void onPostExecute(String result) {
+            response = result;
+            try {
+                JSONObject jsonObj = new JSONObject(response);
+                String status  = jsonObj.getString("Update Sucess!");
+//                if(status.equals("Update Sucess!")){
+//                    //Toast.makeText(SettingActivity.this, "Timer Start", Toast.LENGTH_LONG).show();
+//                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }
 
