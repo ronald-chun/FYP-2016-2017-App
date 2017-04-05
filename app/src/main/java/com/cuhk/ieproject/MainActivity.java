@@ -393,10 +393,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
-            if (itemView == null) {
+//            if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.card_item, parent, false);
                 //itemView.setBackgroundColor(Color.YELLOW);
-            }
+//            }
 
             Card currentCard = currentCards.get(position);
             itemView.setLayoutParams(param);
@@ -420,6 +420,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private void setupCards(int location) {
         if (tempLocation != location) {
+
             currentCards.clear();
 
             if(mySetting.camera()){
