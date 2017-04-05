@@ -107,7 +107,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 requestStartTimer postTimer = (requestStartTimer) new requestStartTimer();
-                postTimer.execute("test/", mySetting.getUsername());
+                postTimer.execute("test/", String.valueOf(mySetting.getUID()));
 
             }
         });
@@ -150,11 +150,11 @@ public class SettingActivity extends AppCompatActivity {
         contextSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked){
-                if(isChecked){
-
-                } else {
-
-                }
+//                if(isChecked){
+//
+//                } else {
+//
+//                }
             }
         });
     }
