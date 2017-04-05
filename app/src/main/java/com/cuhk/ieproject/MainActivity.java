@@ -796,7 +796,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
 //                URL url = new URL("https://192.168.65.99:8080/app/api/loc/B9407F30-F5F8-466E-AFF9-25556B57FE6D/1234/1234");
 //                URL url = new URL("https://192.168.65.99:8080/app/api/pic/count");
-                String tmp = "https://192.168.65.99:8080/app/api/";
+                String tmp = getString(R.string.api_path) + "/app/api/";
                 for (String p: params) {
                     tmp += p;
                 }
@@ -866,7 +866,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     int lid = picture.getInt("lid");
                     int pid = picture.getInt("pid");
                     String pname = picture.getString("pname");
-                    String imgurl = "https://192.168.65.99:8080" + picture.getString("imgurl");
+                    String imgurl = getString(R.string.api_path) + picture.getString("imgurl");
                     //                    Log.d("IMAGE URL", imgurl);
                     String soundurl = picture.getString("soundurl");
                     String description = picture.getString("description");
@@ -887,7 +887,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         protected String doInBackground(String... params) {
             final StringBuilder responseOutput = new StringBuilder();
             try {
-                String tmp = "https://192.168.65.99:8080/app/api/";
+                String tmp = getString(R.string.api_path)+ "/app/api/";
                 for (String p: params) {
                     tmp += p;
                 }

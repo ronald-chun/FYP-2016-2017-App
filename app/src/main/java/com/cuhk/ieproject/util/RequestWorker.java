@@ -1,6 +1,7 @@
 package com.cuhk.ieproject.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
+import com.cuhk.ieproject.R;
 
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.json.JSONException;
@@ -33,7 +35,7 @@ import java.util.Map;
  * Created by anson on 1/9/2016.
  */
 public class RequestWorker {
-    public static final String baseUrl ="https://192.168.65.99:8080/app/api";
+    public static final String baseUrl = Resources.getSystem().getString(R.string.api_path) + "app/api";
     public static final String apiUrl = baseUrl;
 
     private static RequestWorker mInstance;

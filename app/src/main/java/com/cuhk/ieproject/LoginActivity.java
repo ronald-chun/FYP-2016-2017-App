@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         protected String doInBackground(String... params) {
             final StringBuilder responseOutput = new StringBuilder();
             try {
-                String tmp = "https://192.168.65.99:8080/app/api/";
+                String tmp = getString(R.string.api_path) +"/app/api/";
                 for (String p: params) {
                     tmp += p;
                 }

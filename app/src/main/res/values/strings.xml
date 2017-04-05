@@ -8,4 +8,6 @@
     <string name="loading_content">Please Wait...</string>
     <string name="error_ok">確定</string>
     <string name="error_title">錯誤</string>
+
+    <string name="api_path">https://192.168.65.99:8080</string>
 </resources>
