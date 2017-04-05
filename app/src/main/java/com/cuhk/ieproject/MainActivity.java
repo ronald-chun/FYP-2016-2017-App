@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
 
     ArrayList<Card> cards = new ArrayList<>();
+    ArrayList<Card> allCards = new ArrayList<>();
     ArrayList<Card> currentCards = new ArrayList<>();
 
     ArrayAdapter<Card> cardAdapter;
@@ -324,7 +325,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private void setupData() {
 
-        cards = Card.dummy();
+//        cards = Card.dummy();
+        allCards = Card.dummy();
         ibeacons = iBeacon.dummy();
         beaconSize = ibeacons.size();
         locationScore = new Integer[beaconSize];
@@ -515,10 +517,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
             Log.e("cardSize", String.valueOf(cards.size()));
 
-            for (int i = 0; i < cards.size(); i++) {
-                Log.e("card", cards.get(i).toString());
-                if (cards.get(i).getLocation() == location) {
-                    currentCards.add(cards.get(i));
+            if (mySetting.context()) {
+                for (int i = 0; i < cards.size(); i++) {
+                    Log.e("card", cards.get(i).toString());
+                    if (cards.get(i).getLocation() == location) {
+                        currentCards.add(cards.get(i));
+                    }
+                }
+            }else{
+                for (int i = 0; i < allCards.size(); i++){
+                    currentCards.add(allCards.get(i));
                 }
             }
 
