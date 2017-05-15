@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     int cardHeight;
     int colNum = 4;
     int doubleCK = 0;
+    int cameraCount = 0;
 
     TextToSpeech textToSpeech;
 
@@ -382,15 +383,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     }
                 });
 
-//                for (int position = 0; position < beaconSize; position++) {
-//                    if (locationScore[position] >= MAX_VALUE) {
-//                        location = ibeacons.get(position).getLocationID();
-//                    }
-//                }
-//
-//                if (location != Card.LOCATION_NULL) {
-//                    setupCards();
-//                }
             }
         });
     }
@@ -513,6 +505,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
             if(mySetting.camera()){
                 currentCards.add(new Card(location, -1, "相機", "camera_icon", "/uploads/test.mp3", "camera icon", false));
+                //cards.add(new Card(lid, pid, pname, imgurl, soundurl, description, false));
+                if(cameraCount>0){
+                    for(int i=1; i<=cameraCount; i++){
+                        currentCards.add(new Card(location, -2, "myphoto", "sdcard/ie_project/"+i+".jpg", "/uploads/test.mp3", "my photos", true));
+                    }
+                }
+
             }
 
             Log.e("cardSize", String.valueOf(cards.size()));
@@ -609,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             folder.mkdir();
         }
 
-        String filename = String.valueOf(cards.size() + 1) + ".jpg";
+        String filename = String.valueOf(cameraCount) + ".jpg";
 
         File imageFile = new File(folder, filename);
 
@@ -640,6 +639,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mySetting.camera() && position == 0) {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraCount++;
                     File file = getFile();
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                     CAMERA_REQUEST = 9000 + tempLocation;
@@ -726,13 +726,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             }
         } else if (requestCode >= 9000) {
             if (resultCode == Activity.RESULT_OK) {
-                int size = cards.size() + 1;
-
-                String filename = String.valueOf(size) + ".jpg";
-                String path = "sdcard/ie_project/" + filename;
+                //int size = cards.size() + 1;
+                //String filename = String.valueOf(cameraCount) + ".jpg";
+                //String path = "sdcard/ie_project/" + filename;
                 int photoLocation = requestCode - 9000;
                 Log.e("photoLocation", String.valueOf(photoLocation));
-                cards.add(new Card(photoLocation, size, "", path, "/uploads/test.mp3", "", true));
+                //cards.add(new Card(photoLocation, size, "", path, "/uploads/test.mp3", "", true));
                 setupCards(-1);
             }
         }
